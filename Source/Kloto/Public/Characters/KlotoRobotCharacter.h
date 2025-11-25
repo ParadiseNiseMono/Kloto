@@ -13,5 +13,9 @@ UCLASS()
 class KLOTO_API AKlotoRobotCharacter : public AKlotoBaseCharacter
 {
 	GENERATED_BODY()
-	
+
+public:
+
+protected:
+	virtual void BeginPlay() override;
 };
