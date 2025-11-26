@@ -24,7 +24,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
 	AKlotoRobotController* GetRobotControllerFromActorInfo();
 
-	UFUNCTION(BlueprintCallable, Category = "Kloto|Ability")
+	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
 	URobotCombatComponent* GetRobotCombatComponentFromActorInfo();
 private:
 	TWeakObjectPtr<AKlotoRobotCharacter> CachedKlotoRobotCharacter;
