@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "KlotoGameplayTags.h"
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
+#include "Components/Combat/RobotCombatComponent.h"
 #include "Components/Input/KlotoInputComponent.h"
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
@@ -37,6 +38,8 @@ AKlotoRobotCharacter::AKlotoRobotCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.f);
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+
+	RobotCombatComponent = CreateDefaultSubobject<URobotCombatComponent>(TEXT("RobotCombatComponent"));
 }
 
 void AKlotoRobotCharacter::PossessedBy(AController* NewController)
