@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "KlotoGameplayAbility.generated.h"
 
+class UKlotoAbilitySystemComponent;
 class UPawnCombatComponent;
 
 UENUM(BlueprintType)
@@ -34,4 +35,7 @@ protected:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
 	UPawnCombatComponent* GetPawnCombatComponentFromActorInfo() const;
+
+	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
+	UKlotoAbilitySystemComponent* GetKlotoAbilitySystemComponentFromActorInfo() const;
 };
