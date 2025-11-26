@@ -17,7 +17,7 @@ class KLOTO_API UDataAsset_StartUpDataBase : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	virtual void GiveToAbilitySystemComponent(UKlotoAbilitySystemComponent* InKlotoAscToGive, int32 ApplyLevel = 1);
+	virtual void GiveToAbilitySystemComponent(UKlotoAbilitySystemComponent* InAscToGive, int32 ApplyLevel = 1);
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "StartUpData")
@@ -26,5 +26,5 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "StartUpData")
 	TArray<TSubclassOf<UKlotoGameplayAbility>> ReactiveAbilities;
 
-	void GrantAbilities(const TArray<TSubclassOf<UKlotoGameplayAbility>>& InAbilitiesToGive, UKlotoAbilitySystemComponent* InKlotoAscToGive, int32 ApplyLevel = 1);
+	void GrantAbilities(const TArray<TSubclassOf<UKlotoGameplayAbility>>& InAbilitiesToGive, UKlotoAbilitySystemComponent* InAscToGive, int32 ApplyLevel = 1);
 };

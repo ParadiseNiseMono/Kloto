@@ -6,17 +6,17 @@
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "AbilitySystem/Abilities/KlotoGameplayAbility.h"
 
-void UDataAsset_StartUpDataBase::GiveToAbilitySystemComponent(UKlotoAbilitySystemComponent* InKlotoAscToGive,
+void UDataAsset_StartUpDataBase::GiveToAbilitySystemComponent(UKlotoAbilitySystemComponent* InAscToGive,
                                                             int32 ApplyLevel)
 {
-	check(InKlotoAscToGive);
+	check(InAscToGive);
 
-	GrantAbilities(ActivateOnGivenAbilities, InKlotoAscToGive, ApplyLevel);
-	GrantAbilities(ReactiveAbilities, InKlotoAscToGive, ApplyLevel);
+	GrantAbilities(ActivateOnGivenAbilities, InAscToGive, ApplyLevel);
+	GrantAbilities(ReactiveAbilities, InAscToGive, ApplyLevel);
 }
 
 void UDataAsset_StartUpDataBase::GrantAbilities(const TArray<TSubclassOf<UKlotoGameplayAbility>>& InAbilitiesToGive,
-	UKlotoAbilitySystemComponent* InKlotoAscToGive, int32 ApplyLevel)
+	UKlotoAbilitySystemComponent* InAscToGive, int32 ApplyLevel)
 {
 	if (InAbilitiesToGive.IsEmpty()) return;
 
@@ -25,8 +25,8 @@ void UDataAsset_StartUpDataBase::GrantAbilities(const TArray<TSubclassOf<UKlotoG
 		if (!Ability) return;
 
 		FGameplayAbilitySpec AbilitySpec(Ability);
-		AbilitySpec.SourceObject = InKlotoAscToGive->GetAvatarActor();
+		AbilitySpec.SourceObject = InAscToGive->GetAvatarActor();
 		AbilitySpec.Level = ApplyLevel;
-		InKlotoAscToGive->GiveAbility(AbilitySpec);
+		InAscToGive->GiveAbility(AbilitySpec);
 	}
 }

@@ -32,6 +32,8 @@ void AKlotoBaseCharacter::PossessedBy(AController* NewController)
 	if (KlotoAbilitySystemComponent)
 	{
 		KlotoAbilitySystemComponent->InitAbilityActorInfo(this, this);
+		
+		ensureMsgf(!CharacterStartUpData.IsNull(), TEXT("Forgot to assign start up data to %s"), *GetName());
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "KlotoBaseCharacter.generated.h"
 
+class UDataAsset_StartUpDataBase;
 class UKlotoAttributeSet;
 class UKlotoAbilitySystemComponent;
 
@@ -32,6 +33,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UKlotoAttributeSet* KlotoAttributeSet;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data")
+	TSoftObjectPtr<UDataAsset_StartUpDataBase> CharacterStartUpData;
 
 public:
 	FORCEINLINE UKlotoAbilitySystemComponent* GetKlotoAbilitySystemComponent() const { return KlotoAbilitySystemComponent; }

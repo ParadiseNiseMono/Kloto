@@ -13,6 +13,7 @@
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "Components/Input/KlotoInputComponent.h"
 #include "DataAssets/Input/DataAsset_InputConfig.h"
+#include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
 
 AKlotoRobotCharacter::AKlotoRobotCharacter()
 {
@@ -42,11 +43,12 @@ void AKlotoRobotCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	if (KlotoAbilitySystemComponent && KlotoAttributeSet)
+	if (!CharacterStartUpData.IsNull())
 	{
-		const FString ASCText = FString::Printf(TEXT("Owner Actor: %s, AvatarActor: %s"), *KlotoAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *KlotoAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
-		Debug::Print(TEXT("Ability System Component:" + ASCText));
-		Debug::Print(TEXT("Attribute Set:" + ASCText));
+		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous())
+		{
+			LoadedData->GiveToAbilitySystemComponent(KlotoAbilitySystemComponent);
+		}
 	}
 }
 
