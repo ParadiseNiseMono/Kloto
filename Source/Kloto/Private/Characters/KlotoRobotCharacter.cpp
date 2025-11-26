@@ -73,6 +73,7 @@ void AKlotoRobotCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+	KlotoInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
 
 void AKlotoRobotCharacter::Input_Move(const FInputActionValue& InputActionValue)
@@ -108,4 +109,14 @@ void AKlotoRobotCharacter::Input_Look(const FInputActionValue& InputActionValue)
 	{
 		AddControllerPitchInput(LookAxisVector.Y);	
 	}
+}
+
+void AKlotoRobotCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
+{
+	KlotoAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
+}
+
+void AKlotoRobotCharacter::Input_AbilityInputReleased(FGameplayTag InInputTag)
+{
+	KlotoAbilitySystemComponent->OnAbilityInputReleased(InInputTag);
 }
