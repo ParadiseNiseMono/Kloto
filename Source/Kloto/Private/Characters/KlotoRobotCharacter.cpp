@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "KlotoGameplayTags.h"
+#include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "Components/Input/KlotoInputComponent.h"
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 
@@ -37,11 +38,21 @@ AKlotoRobotCharacter::AKlotoRobotCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 }
 
+void AKlotoRobotCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (KlotoAbilitySystemComponent && KlotoAttributeSet)
+	{
+		const FString ASCText = FString::Printf(TEXT("Owner Actor: %s, AvatarActor: %s"), *KlotoAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *KlotoAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
+		Debug::Print(TEXT("Ability System Component:" + ASCText));
+		Debug::Print(TEXT("Attribute Set:" + ASCText));
+	}
+}
+
 void AKlotoRobotCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Debug::Print(TEXT("Working"));
 }
 
 void AKlotoRobotCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

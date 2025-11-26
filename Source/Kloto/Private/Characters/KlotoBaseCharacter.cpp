@@ -3,6 +3,9 @@
 
 #include "Characters/KlotoBaseCharacter.h"
 
+#include "AbilitySystem/KlotoAbilitySystemComponent.h"
+#include "AbilitySystem/KlotoAttributeSet.h"
+
 // Sets default values
 AKlotoBaseCharacter::AKlotoBaseCharacter()
 {
@@ -11,6 +14,25 @@ AKlotoBaseCharacter::AKlotoBaseCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
 	GetMesh()->bReceivesDecals = false;
+
+	KlotoAbilitySystemComponent = CreateDefaultSubobject<UKlotoAbilitySystemComponent>("KlotoAbilitySystemComponent");
+
+	KlotoAttributeSet = CreateDefaultSubobject<UKlotoAttributeSet>("KlotoAttributeSet");
+}
+
+UAbilitySystemComponent* AKlotoBaseCharacter::GetAbilitySystemComponent() const
+{
+	return GetKlotoAbilitySystemComponent();
+}
+
+void AKlotoBaseCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (KlotoAbilitySystemComponent)
+	{
+		KlotoAbilitySystemComponent->InitAbilityActorInfo(this, this);
+	}
 }
 
 
