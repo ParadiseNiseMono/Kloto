@@ -5,11 +5,6 @@
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "AbilitySystem/Abilities/KlotoGameplayAbility.h"
 
-bool FKlotoRobotAbilitySet::IsValid() const
-{
-	return InputTag.IsValid() && AbilityToGrant;
-}
-
 void UDataAsset_RobotStartUpData::GiveToAbilitySystemComponent(UKlotoAbilitySystemComponent* InAscToGive,
 	int32 ApplyLevel)
 {

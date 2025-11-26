@@ -3,23 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
+#include "KlotoTypes/KlotoStructTypes.h"
 #include "DataAsset_RobotStartUpData.generated.h"
 
-USTRUCT(BlueprintType)
-struct FKlotoRobotAbilitySet
-{
-	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "InputTag"))
-	FGameplayTag InputTag;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UKlotoGameplayAbility> AbilityToGrant;
-
-	bool IsValid() const;
-};
 
 /**
  * 
