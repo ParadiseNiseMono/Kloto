@@ -6,6 +6,8 @@
 #include "Abilities/GameplayAbility.h"
 #include "KlotoGameplayAbility.generated.h"
 
+class UPawnCombatComponent;
+
 UENUM(BlueprintType)
 enum class EKlotoAbilityActivationPolicy : uint8
 {
@@ -29,4 +31,7 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "KlotoAbility")
 	EKlotoAbilityActivationPolicy ActivationPolicy = EKlotoAbilityActivationPolicy::OnTriggered;
+
+	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
+	UPawnCombatComponent* GetPawnCombatComponentFromActorInfo() const;
 };

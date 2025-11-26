@@ -4,6 +4,7 @@
 #include "AbilitySystem/Abilities/KlotoGameplayAbility.h"
 
 #include "AbilitySystemComponent.h"
+#include "Components/Combat/PawnCombatComponent.h"
 
 void UKlotoGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
@@ -31,4 +32,9 @@ void UKlotoGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle,
 			ActorInfo->AbilitySystemComponent->ClearAbility(Handle);
 		}
 	}
+}
+
+UPawnCombatComponent* UKlotoGameplayAbility::GetPawnCombatComponentFromActorInfo() const
+{
+	return GetAvatarActorFromActorInfo()->FindComponentByClass<UPawnCombatComponent>();
 }
