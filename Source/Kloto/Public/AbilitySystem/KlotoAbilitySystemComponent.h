@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "KlotoTypes/KlotoStructTypes.h"
 #include "KlotoAbilitySystemComponent.generated.h"
 
 /**
@@ -17,4 +18,7 @@ class KLOTO_API UKlotoAbilitySystemComponent : public UAbilitySystemComponent
 public:
 	void OnAbilityInputPressed(const FGameplayTag& InInputTag);
 	void OnAbilityInputReleased(const FGameplayTag& InInputTag);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|Ability", meta = (ApplyLevel = "1"))
+	void GrantRobotAbilities(const TArray<FKlotoRobotAbilitySet>& InDefaultWeaponAbilities, int32 InApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles);
 };
