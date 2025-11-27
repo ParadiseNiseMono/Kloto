@@ -22,7 +22,7 @@ void UKlotoAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& In
 	
 }
 
-void UKlotoAbilitySystemComponent::GrantRobotAbilities(const TArray<FKlotoRobotAbilitySet>& InDefaultWeaponAbilities,
+void UKlotoAbilitySystemComponent::GrantRobotWeaponAbilities(const TArray<FKlotoRobotAbilitySet>& InDefaultWeaponAbilities,
 	int32 InApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles)
 {
 	if (InDefaultWeaponAbilities.IsEmpty()) return;
@@ -38,4 +38,20 @@ void UKlotoAbilitySystemComponent::GrantRobotAbilities(const TArray<FKlotoRobotA
 		
 		OutGrantedAbilitySpecHandles.AddUnique(GiveAbility(AbilitySpec));
 	}
+}
+
+void UKlotoAbilitySystemComponent::RemoveGrantedRobotWeaponAbilities(
+	TArray<FGameplayAbilitySpecHandle>& InSpecHandleToRemove)
+{
+	if (InSpecHandleToRemove.IsEmpty()) return;
+
+	for (const FGameplayAbilitySpecHandle& SpecHandle : InSpecHandleToRemove)
+	{
+		if (SpecHandle.IsValid())
+		{
+			ClearAbility(SpecHandle);
+		}
+	}
+
+	InSpecHandleToRemove.Empty();
 }
