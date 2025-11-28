@@ -17,7 +17,7 @@ void UKlotoFunctionLibrary::AddGameplayTagToActorIfNone(AActor* InActor, FGamepl
 {
 	UKlotoAbilitySystemComponent* ASC = NativeGetKlotoAscFromActor(InActor);
 
-	if (ASC->HasMatchingGameplayTag(TagToAdd))
+	if (!ASC->HasMatchingGameplayTag(TagToAdd))
 	{
 		ASC->AddLooseGameplayTag(TagToAdd);
 	}
