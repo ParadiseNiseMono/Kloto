@@ -5,6 +5,7 @@
 
 #include "KlotoStructTypes.generated.h"
 
+class UKlotoRobotGameplayAbility;
 class UInputMappingContext;
 class UKlotoGameplayAbility;
 class UKlotoRobotLinkedAnimLayer;
@@ -18,7 +19,7 @@ struct FKlotoRobotAbilitySet
 	FGameplayTag InputTag;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UKlotoGameplayAbility> AbilityToGrant;
+	TSubclassOf<UKlotoRobotGameplayAbility> AbilityToGrant;
 
 	bool IsValid() const;
 };

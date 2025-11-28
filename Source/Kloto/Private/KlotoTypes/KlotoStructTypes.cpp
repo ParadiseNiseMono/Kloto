@@ -3,7 +3,7 @@
 
 #include "KlotoTypes/KlotoStructTypes.h"
 
-#include "AbilitySystem/Abilities/KlotoGameplayAbility.h"
+#include "AbilitySystem/Abilities/KlotoRobotGameplayAbility.h"
 
 bool FKlotoRobotAbilitySet::IsValid() const
 {
