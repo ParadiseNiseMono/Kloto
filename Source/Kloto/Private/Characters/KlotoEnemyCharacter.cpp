@@ -4,7 +4,11 @@
 #include "Characters/KlotoEnemyCharacter.h"
 
 #include "Components/Combat/EnemyCombatComponent.h"
+#include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
+#include "Engine/AssetManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
+#include "KlotoDebugHelper.h"
 
 AKlotoEnemyCharacter::AKlotoEnemyCharacter()
 {
@@ -21,4 +25,28 @@ AKlotoEnemyCharacter::AKlotoEnemyCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 1000.0f;
 
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>("EnemyCombatComponent");
+}
+
+void AKlotoEnemyCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	InitEnemyStartUpData();
+}
+
+void AKlotoEnemyCharacter::InitEnemyStartUpData()
+{
+	if (CharacterStartUpData.IsNull()) return;
+
+	UAssetManager::GetStreamableManager().RequestAsyncLoad(
+		CharacterStartUpData.ToSoftObjectPath(),
+		FStreamableDelegate::CreateLambda([this]()
+	{
+		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.Get())
+		{
+			LoadedData->GiveToAbilitySystemComponent(KlotoAbilitySystemComponent);
+
+			Debug::Print(TEXT("Enemy Start"));
+		}
+	}));
 }
