@@ -3,6 +3,7 @@
 
 #include "Items/Weapons/KlotoWeaponBase.h"
 
+#include "KlotoDebugHelper.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -18,6 +19,42 @@ AKlotoWeaponBase::AKlotoWeaponBase()
 	WeaponCollisionBox->SetupAttachment(GetRootComponent());
 	WeaponCollisionBox->SetBoxExtent(FVector(20.f));
 	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	WeaponCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnCollisionBoxBeginOverlap);
+	WeaponCollisionBox->OnComponentEndOverlap.AddUniqueDynamic(this, &ThisClass::OnCollisionBoxEndOverlap);
+}
+
+void AKlotoWeaponBase::OnCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	APawn* WeaponOwingPawn = GetInstigator<APawn>();
+
+	check(WeaponOwingPawn);
+
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if (WeaponOwingPawn != HitPawn)
+		{
+			Debug::Print(GetName() + TEXT(" begin overlap with ") + HitPawn->GetName());
+		}
+		//TODO: Implement hit check for enemy Characters 
+	}
+}
+
+void AKlotoWeaponBase::OnCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	APawn* WeaponOwingPawn = GetInstigator<APawn>();
+
+	check(WeaponOwingPawn);
+
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if (WeaponOwingPawn != HitPawn)
+		{
+			Debug::Print(GetName() + TEXT(" End overlap with ") + HitPawn->GetName());
+		}
+		//TODO: Implement hit check for enemy Characters 
+	}
 }
 
 
