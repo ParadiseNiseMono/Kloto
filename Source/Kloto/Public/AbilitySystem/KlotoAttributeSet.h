@@ -24,6 +24,8 @@ class KLOTO_API UKlotoAttributeSet : public UAttributeSet
 public:
 	UKlotoAttributeSet();
 
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	FGameplayAttributeData CurrentHealth;
 	ATTRIBUTE_ACCESSORS(UKlotoAttributeSet, CurrentHealth)
