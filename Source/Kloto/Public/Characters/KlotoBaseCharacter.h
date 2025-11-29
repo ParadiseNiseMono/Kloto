@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "Interfaces/PawnCombatInterface.h"
 #include "KlotoBaseCharacter.generated.h"
 
 class UDataAsset_StartUpDataBase;
@@ -12,7 +13,7 @@ class UKlotoAttributeSet;
 class UKlotoAbilitySystemComponent;
 
 UCLASS()
-class KLOTO_API AKlotoBaseCharacter : public ACharacter, public IAbilitySystemInterface
+class KLOTO_API AKlotoBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface
 {
 	GENERATED_BODY()
 
@@ -22,6 +23,10 @@ public:
 	//~ Begin IAbilitySystemInterface Interface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//~ End IAbilitySystemInterface Interface
+
+	//~ Begin IPawnCombatInterface Interface
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
+	//~ End IPawnCombatInterface Interface
 protected:
 
 	//~ Begin APawn	Interface

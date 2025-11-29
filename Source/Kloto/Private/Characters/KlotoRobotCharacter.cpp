@@ -76,6 +76,11 @@ void AKlotoRobotCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	KlotoInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
 
+UPawnCombatComponent* AKlotoRobotCharacter::GetPawnCombatComponent() const
+{
+	return RobotCombatComponent;
+}
+
 void AKlotoRobotCharacter::Input_Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();

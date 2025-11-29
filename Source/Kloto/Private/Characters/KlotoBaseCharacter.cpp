@@ -25,6 +25,11 @@ UAbilitySystemComponent* AKlotoBaseCharacter::GetAbilitySystemComponent() const
 	return GetKlotoAbilitySystemComponent();
 }
 
+UPawnCombatComponent* AKlotoBaseCharacter::GetPawnCombatComponent() const
+{
+	return nullptr;
+}
+
 void AKlotoBaseCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);

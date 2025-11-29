@@ -34,6 +34,11 @@ void AKlotoEnemyCharacter::PossessedBy(AController* NewController)
 	InitEnemyStartUpData();
 }
 
+UPawnCombatComponent* AKlotoEnemyCharacter::GetPawnCombatComponent() const
+{
+	return EnemyCombatComponent;
+}
+
 void AKlotoEnemyCharacter::InitEnemyStartUpData()
 {
 	if (CharacterStartUpData.IsNull()) return;

@@ -5,6 +5,8 @@
 
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Interfaces/PawnCombatInterface.h"
+
 
 UKlotoAbilitySystemComponent* UKlotoFunctionLibrary::NativeGetKlotoAscFromActor(AActor* InActor)
 {
@@ -44,4 +46,25 @@ void UKlotoFunctionLibrary::BP_DoesActorHasTag(AActor* InActor, FGameplayTag Tag
 	EKlotoConfirmType& OutConfirmType)
 {
 	OutConfirmType = NativeDoesActorHasTag(InActor, TagToCheck) ? EKlotoConfirmType::Yes : EKlotoConfirmType::No;
+}
+
+UPawnCombatComponent* UKlotoFunctionLibrary::NativeGetPawnCombatComponentFromActor(AActor* InActor)
+{
+	check(InActor);
+
+	if (IPawnCombatInterface* PawnCombatInterface = Cast<IPawnCombatInterface>(InActor))
+	{
+		return PawnCombatInterface->GetPawnCombatComponent();
+	}
+	return nullptr;
+}
+
+UPawnCombatComponent* UKlotoFunctionLibrary::BP_GetPawnCombatComponentFromActor(AActor* InActor,
+	EKlotoValidType& OutValidType)
+{
+	UPawnCombatComponent* PawnCombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
+
+	OutValidType = PawnCombatComponent ? EKlotoValidType::Valid : EKlotoValidType::Invalid;
+
+	return PawnCombatComponent;
 }

@@ -4,14 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "KlotoTypes/KlotoEnumTypes.h"
 #include "KlotoFunctionLibrary.generated.h"
 
-UENUM()
-enum class EKlotoConfirmType : uint8
-{
-	Yes,
-	No
-};
+class UPawnCombatComponent;
 
 struct FGameplayTag;
 class UKlotoAbilitySystemComponent;
@@ -36,4 +32,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLibary", meta = (DisplayName = "Does Actor Has Tag", ExpandEnumAsExecs = "OutConfirmType"))
 	static void BP_DoesActorHasTag(AActor* InActor, FGameplayTag TagToCheck,EKlotoConfirmType& OutConfirmType);
+
+	static UPawnCombatComponent* NativeGetPawnCombatComponentFromActor(AActor* InActor);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLibary", meta = (DisplayName = "Get Pawn Combat Component From Actor", ExpandEnumAsExecs = "OutValidType"))
+	static UPawnCombatComponent* BP_GetPawnCombatComponentFromActor(AActor* InActor, EKlotoValidType& OutValidType);
 };
