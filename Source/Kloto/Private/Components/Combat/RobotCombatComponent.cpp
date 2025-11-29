@@ -3,7 +3,10 @@
 
 #include "Components/Combat/RobotCombatComponent.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "KlotoDebugHelper.h"
+#include "KlotoGameplayTags.h"
+#include "Abilities/GameplayAbilityTypes.h"
 #include "Items/Weapons/KlotoRobotWeapon.h"
 
 AKlotoRobotWeapon* URobotCombatComponent::GetRobotCarriedWeaponByTag(FGameplayTag InWeaponTag) const
@@ -13,10 +16,17 @@ AKlotoRobotWeapon* URobotCombatComponent::GetRobotCarriedWeaponByTag(FGameplayTa
 
 void URobotCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
-	Debug::Print(GetOwningPawn()->GetActorNameOrLabel() + TEXT("Hit") + HitActor->GetActorNameOrLabel());
+	if (OverlappedActors.Contains(HitActor)) return;
+
+	OverlappedActors.AddUnique(HitActor);
+
+	FGameplayEventData Data;
+	Data.Instigator = GetOwner();
+	Data.Target = HitActor;
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwner(), KlotoGameplayTags::Shared_Event_MeleeHit, Data);
 }
 
 void URobotCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
 {
-	Debug::Print(GetOwningPawn()->GetActorNameOrLabel() + TEXT("Pulled") + InteractedActor->GetActorNameOrLabel());
+	
 }
