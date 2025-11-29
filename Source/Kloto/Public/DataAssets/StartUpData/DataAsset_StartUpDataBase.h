@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "DataAsset_StartUpDataBase.generated.h"
 
+class UGameplayEffect;
 class UKlotoAbilitySystemComponent;
 class UKlotoGameplayAbility;
 /**
@@ -25,6 +26,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "StartUpData")
 	TArray<TSubclassOf<UKlotoGameplayAbility>> ReactiveAbilities;
+
+	UPROPERTY(EditDefaultsOnly, Category = "StartUpData")
+	TArray<TSubclassOf<UGameplayEffect>> StartUpGameplayEffects;
 
 	void GrantAbilities(const TArray<TSubclassOf<UKlotoGameplayAbility>>& InAbilitiesToGive, UKlotoAbilitySystemComponent* InAscToGive, int32 ApplyLevel = 1);
 };
