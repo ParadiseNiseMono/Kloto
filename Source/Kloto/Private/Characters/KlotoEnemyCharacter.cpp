@@ -50,8 +50,6 @@ void AKlotoEnemyCharacter::InitEnemyStartUpData()
 		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.Get())
 		{
 			LoadedData->GiveToAbilitySystemComponent(KlotoAbilitySystemComponent);
-
-			Debug::Print(TEXT("Enemy Start"));
 		}
 	}));
 }

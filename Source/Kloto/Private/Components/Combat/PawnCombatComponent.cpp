@@ -5,6 +5,7 @@
 
 #include "Items/Weapons/KlotoWeaponBase.h"
 #include "KlotoDebugHelper.h"
+#include "Components/BoxComponent.h"
 
 void UPawnCombatComponent::RegisterSpawnedWeapon(const FGameplayTag& InWeaponTagToRegister,
                                                  AKlotoWeaponBase* InWeaponToRegister, bool bRegisterAsEquippedWeapon)
@@ -37,4 +38,25 @@ AKlotoWeaponBase* UPawnCombatComponent::GetCharacterCurrentEquippedWeapon() cons
 	if (!CurrentEquippedWeaponTag.IsValid()) return nullptr;
 
 	return GetCharacterCarriedWeaponByTag(CurrentEquippedWeaponTag);
+}
+
+void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+{
+	if (ToggleDamageType == EToggleDamageType::CurrentEquippedWeapon)
+	{
+		AKlotoWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
+
+		check(WeaponToToggle);
+
+		if (bShouldEnable)
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+			Debug::Print(WeaponToToggle->GetName() + TEXT("Collision Enabled"));
+		}
+		else
+		{
+			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			Debug::Print(WeaponToToggle->GetName() + TEXT("Collision Disabled"));
+		}
+	}
 }

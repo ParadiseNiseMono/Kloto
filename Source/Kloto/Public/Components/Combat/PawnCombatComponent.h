@@ -8,6 +8,15 @@
 #include "PawnCombatComponent.generated.h"
 
 class AKlotoWeaponBase;
+
+UENUM(BlueprintType)
+enum class EToggleDamageType : uint8
+{
+	CurrentEquippedWeapon,
+	LeftHand,
+	RightHand
+};
+
 /**
  * 
  */
@@ -28,6 +37,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Kloto|Combat")
 	AKlotoWeaponBase* GetCharacterCurrentEquippedWeapon() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|Combat")
+	void ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType = EToggleDamageType::CurrentEquippedWeapon);
 private:
 	UPROPERTY()
 	TMap<FGameplayTag, AKlotoWeaponBase*> CharacterCarriedWeaponMap;
