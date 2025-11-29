@@ -26,6 +26,10 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
 	URobotCombatComponent* GetRobotCombatComponentFromActorInfo();
+
+	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
+	FGameplayEffectSpecHandle MakeRobotDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass,
+		float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag, int32 CurrentComboCount);
 private:
 	TWeakObjectPtr<AKlotoRobotCharacter> CachedKlotoRobotCharacter;
 	TWeakObjectPtr<AKlotoRobotController> CachedKlotoRobotController;

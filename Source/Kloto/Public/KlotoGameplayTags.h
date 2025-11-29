@@ -32,4 +32,6 @@ namespace KlotoGameplayTags
 
 	/*Shared Tags*/
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Event_MeleeHit);
+
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_SetByCaller_BaseDamage);
 }

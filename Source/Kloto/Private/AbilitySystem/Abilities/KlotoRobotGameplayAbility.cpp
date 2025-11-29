@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/KlotoRobotGameplayAbility.h"
 
+#include "KlotoGameplayTags.h"
+#include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "Characters/KlotoRobotCharacter.h"
 #include "Controllers/KlotoRobotController.h"
 
@@ -29,4 +31,27 @@ AKlotoRobotController* UKlotoRobotGameplayAbility::GetRobotControllerFromActorIn
 URobotCombatComponent* UKlotoRobotGameplayAbility::GetRobotCombatComponentFromActorInfo()
 {
 	return GetRobotCharacterFromActorInfo()->GetRobotCombatComponent();
+}
+
+FGameplayEffectSpecHandle UKlotoRobotGameplayAbility::MakeRobotDamageEffectSpecHandle(
+	TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag,
+	int32 CurrentComboCount)
+{
+	check(EffectClass);
+
+	FGameplayEffectContextHandle ContextHandle = GetKlotoAbilitySystemComponentFromActorInfo()->MakeEffectContext();
+	ContextHandle.AddInstigator(GetAvatarActorFromActorInfo(), GetAvatarActorFromActorInfo());
+	ContextHandle.SetAbility(this);
+	ContextHandle.AddSourceObject(GetAvatarActorFromActorInfo());
+
+	FGameplayEffectSpecHandle EffectSpecHandle = GetKlotoAbilitySystemComponentFromActorInfo()->MakeOutgoingSpec(EffectClass, GetAbilityLevel(), ContextHandle);
+
+	EffectSpecHandle.Data->SetSetByCallerMagnitude(KlotoGameplayTags::Shared_SetByCaller_BaseDamage, InWeaponBaseDamage);
+
+	if (InCurrentAttackTypeTag.IsValid())
+	{
+		EffectSpecHandle.Data->SetSetByCallerMagnitude(InCurrentAttackTypeTag, CurrentComboCount);
+	}
+
+	return EffectSpecHandle;
 }
