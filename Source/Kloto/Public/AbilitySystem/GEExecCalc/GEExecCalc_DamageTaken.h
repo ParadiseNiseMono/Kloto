@@ -16,4 +16,6 @@ class KLOTO_API UGEExecCalc_DamageTaken : public UGameplayEffectExecutionCalcula
 
 public:
 	UGEExecCalc_DamageTaken();
+
+	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 };
