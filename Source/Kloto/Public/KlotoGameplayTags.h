@@ -27,6 +27,9 @@ namespace KlotoGameplayTags
 
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_JumpToFinisher);
 
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_SetByCaller_AttackType_Light);
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_SetByCaller_AttackType_Heavy);
+
 	/*Enemy Tags*/
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
 

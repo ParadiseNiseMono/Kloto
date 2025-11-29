@@ -14,6 +14,16 @@ AKlotoRobotWeapon* URobotCombatComponent::GetRobotCarriedWeaponByTag(FGameplayTa
 	return Cast<AKlotoRobotWeapon>(GetCharacterCarriedWeaponByTag(InWeaponTag));
 }
 
+AKlotoRobotWeapon* URobotCombatComponent::GetRobotCurrentEquippedWeapon() const
+{
+	return Cast<AKlotoRobotWeapon>(GetCharacterCurrentEquippedWeapon());
+}
+
+float URobotCombatComponent::GetRobotCurrentEquippedWeaponDamageAtLevel(int32 InLevel) const
+{
+	return GetRobotCurrentEquippedWeapon()->RobotWeaponData.WeaponBaseDamage.GetValueAtLevel(InLevel);
+}
+
 void URobotCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
 	if (OverlappedActors.Contains(HitActor)) return;

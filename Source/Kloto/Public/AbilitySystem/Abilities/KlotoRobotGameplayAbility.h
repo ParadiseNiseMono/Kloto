@@ -29,7 +29,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
 	FGameplayEffectSpecHandle MakeRobotDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass,
-		float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag, int32 CurrentComboCount);
+		float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag, int32 InUsedComboCount);
 private:
 	TWeakObjectPtr<AKlotoRobotCharacter> CachedKlotoRobotCharacter;
 	TWeakObjectPtr<AKlotoRobotController> CachedKlotoRobotController;

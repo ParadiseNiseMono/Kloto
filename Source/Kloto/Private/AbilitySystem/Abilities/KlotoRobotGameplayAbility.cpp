@@ -35,7 +35,7 @@ URobotCombatComponent* UKlotoRobotGameplayAbility::GetRobotCombatComponentFromAc
 
 FGameplayEffectSpecHandle UKlotoRobotGameplayAbility::MakeRobotDamageEffectSpecHandle(
 	TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag,
-	int32 CurrentComboCount)
+	int32 InUsedComboCount)
 {
 	check(EffectClass);
 
@@ -50,7 +50,7 @@ FGameplayEffectSpecHandle UKlotoRobotGameplayAbility::MakeRobotDamageEffectSpecH
 
 	if (InCurrentAttackTypeTag.IsValid())
 	{
-		EffectSpecHandle.Data->SetSetByCallerMagnitude(InCurrentAttackTypeTag, CurrentComboCount);
+		EffectSpecHandle.Data->SetSetByCallerMagnitude(InCurrentAttackTypeTag, InUsedComboCount);
 	}
 
 	return EffectSpecHandle;
