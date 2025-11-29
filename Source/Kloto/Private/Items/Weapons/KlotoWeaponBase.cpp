@@ -28,13 +28,13 @@ void AKlotoWeaponBase::OnCollisionBoxBeginOverlap(UPrimitiveComponent* Overlappe
 {
 	APawn* WeaponOwingPawn = GetInstigator<APawn>();
 
-	check(WeaponOwingPawn);
+	checkf(WeaponOwingPawn, TEXT("Forgot to assign a instigator for weapon: %s"), *GetName());
 
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
 		if (WeaponOwingPawn != HitPawn)
 		{
-			Debug::Print(GetName() + TEXT(" begin overlap with ") + HitPawn->GetName());
+			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
 		//TODO: Implement hit check for enemy Characters 
 	}
@@ -45,13 +45,13 @@ void AKlotoWeaponBase::OnCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedC
 {
 	APawn* WeaponOwingPawn = GetInstigator<APawn>();
 
-	check(WeaponOwingPawn);
+	checkf(WeaponOwingPawn, TEXT("Forgot to assign a instigator for weapon: %s"), *GetName());
 
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
 		if (WeaponOwingPawn != HitPawn)
 		{
-			Debug::Print(GetName() + TEXT(" End overlap with ") + HitPawn->GetName());
+			OnWeaponPulledFromTarget.ExecuteIfBound(OtherActor);
 		}
 		//TODO: Implement hit check for enemy Characters 
 	}

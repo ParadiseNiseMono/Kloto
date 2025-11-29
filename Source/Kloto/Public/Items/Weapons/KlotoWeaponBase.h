@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "KlotoWeaponBase.generated.h"
 
+DECLARE_DELEGATE_OneParam(FOnTargetInteractedDelegate, AActor*);
+
 class UBoxComponent;
 
 UCLASS()
@@ -16,7 +18,9 @@ class KLOTO_API AKlotoWeaponBase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AKlotoWeaponBase();
-	
+
+	FOnTargetInteractedDelegate OnWeaponHitTarget;
+	FOnTargetInteractedDelegate OnWeaponPulledFromTarget;
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapons")

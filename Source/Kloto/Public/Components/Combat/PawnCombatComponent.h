@@ -40,6 +40,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Kloto|Combat")
 	void ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType = EToggleDamageType::CurrentEquippedWeapon);
+
+	virtual void OnHitTargetActor(AActor* HitActor);
+	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
 private:
 	UPROPERTY()
 	TMap<FGameplayTag, AKlotoWeaponBase*> CharacterCarriedWeaponMap;

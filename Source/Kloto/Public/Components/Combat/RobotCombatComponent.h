@@ -18,4 +18,7 @@ class KLOTO_API URobotCombatComponent : public UPawnCombatComponent
 public:
 	UFUNCTION(BlueprintCallable, Category = "Kloto|Combat")
 	AKlotoRobotWeapon* GetRobotCarriedWeaponByTag(FGameplayTag InWeaponTag) const;
+
+	virtual void OnHitTargetActor(AActor* HitActor) override;
+	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor) override;
 };
