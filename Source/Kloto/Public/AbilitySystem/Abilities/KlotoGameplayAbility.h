@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "KlotoTypes/KlotoEnumTypes.h"
 #include "KlotoGameplayAbility.generated.h"
 
 class UKlotoAbilitySystemComponent;
@@ -38,4 +39,9 @@ protected:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
 	UKlotoAbilitySystemComponent* GetKlotoAbilitySystemComponentFromActorInfo() const;
+
+	FActiveGameplayEffectHandle NativeApplyGameplayEffectSpecHandleToTarget(AActor* TargetActor, const FGameplayEffectSpecHandle& InSpecHandle);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|Ability", meta = (DisplayName = "Apply Gameplay Effect Spec Handle To Target", ExpandEnumAsExecs = "OutSuccessType"))
+	FActiveGameplayEffectHandle BP_ApplyGameplayEffectSpecHandleToTarget(AActor* TargetActor, const FGameplayEffectSpecHandle& InSpecHandle, EKlotoSuccessType& OutSuccessType);
 };

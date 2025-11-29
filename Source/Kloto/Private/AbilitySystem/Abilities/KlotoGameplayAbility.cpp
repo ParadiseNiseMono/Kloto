@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/Abilities/KlotoGameplayAbility.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "Components/Combat/PawnCombatComponent.h"
@@ -43,4 +44,24 @@ UPawnCombatComponent* UKlotoGameplayAbility::GetPawnCombatComponentFromActorInfo
 UKlotoAbilitySystemComponent* UKlotoGameplayAbility::GetKlotoAbilitySystemComponentFromActorInfo() const
 {
 	return Cast<UKlotoAbilitySystemComponent>(CurrentActorInfo->AbilitySystemComponent);
+}
+
+FActiveGameplayEffectHandle UKlotoGameplayAbility::NativeApplyGameplayEffectSpecHandleToTarget(AActor* TargetActor,
+	const FGameplayEffectSpecHandle& InSpecHandle)
+{
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+
+	check(TargetASC && InSpecHandle.IsValid());
+
+	return GetKlotoAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(*InSpecHandle.Data, TargetASC);
+}
+
+FActiveGameplayEffectHandle UKlotoGameplayAbility::BP_ApplyGameplayEffectSpecHandleToTarget(AActor* TargetActor,
+	const FGameplayEffectSpecHandle& InSpecHandle, EKlotoSuccessType& OutSuccessType)
+{
+	FActiveGameplayEffectHandle ActiveGameplayEffectHandle = NativeApplyGameplayEffectSpecHandleToTarget(TargetActor, InSpecHandle);
+
+	OutSuccessType = ActiveGameplayEffectHandle.WasSuccessfullyApplied() ? EKlotoSuccessType::Successful : EKlotoSuccessType::Failed;
+
+	return ActiveGameplayEffectHandle;
 }
