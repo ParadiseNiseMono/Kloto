@@ -3,7 +3,6 @@
 
 #include "Characters/KlotoRobotCharacter.h"
 
-#include "KlotoDebugHelper.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -13,6 +12,7 @@
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "Components/Combat/RobotCombatComponent.h"
 #include "Components/Input/KlotoInputComponent.h"
+#include "Components/UI/RobotUIComponent.h"
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
 
@@ -40,6 +40,8 @@ AKlotoRobotCharacter::AKlotoRobotCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
 	RobotCombatComponent = CreateDefaultSubobject<URobotCombatComponent>(TEXT("RobotCombatComponent"));
+	
+	RobotUIComponent = CreateDefaultSubobject<URobotUIComponent>(TEXT("RobotUIComponent"));
 }
 
 void AKlotoRobotCharacter::PossessedBy(AController* NewController)
@@ -79,6 +81,11 @@ void AKlotoRobotCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 UPawnCombatComponent* AKlotoRobotCharacter::GetPawnCombatComponent() const
 {
 	return RobotCombatComponent;
+}
+
+UPawnUIComponent* AKlotoRobotCharacter::GetPawnUIComponent() const
+{
+	return RobotUIComponent;
 }
 
 void AKlotoRobotCharacter::Input_Move(const FInputActionValue& InputActionValue)

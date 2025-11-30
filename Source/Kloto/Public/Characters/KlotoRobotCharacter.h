@@ -6,6 +6,7 @@
 #include "Characters/KlotoBaseCharacter.h"
 #include "KlotoRobotCharacter.generated.h"
 
+class URobotUIComponent;
 struct FGameplayTag;
 class URobotCombatComponent;
 struct FInputActionValue;
@@ -32,6 +33,10 @@ protected:
 	//~ Begin IPawnCombatInterface Interface
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 	//~ End IPawnCombatInterface Interface
+
+	//~ Begin IPawnUIInterface Interface
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	//~ End IPawnUIInterface Interface
 private:
 	
 #pragma region Components
@@ -44,6 +49,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	URobotCombatComponent* RobotCombatComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	URobotUIComponent* RobotUIComponent;
 	
 #pragma endregion
 

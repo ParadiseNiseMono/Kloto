@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "KlotoDebugHelper.h"
+#include "Components/UI/EnemyUIComponent.h"
 
 AKlotoEnemyCharacter::AKlotoEnemyCharacter()
 {
@@ -24,7 +25,9 @@ AKlotoEnemyCharacter::AKlotoEnemyCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 1000.0f;
 
-	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>("EnemyCombatComponent");
+	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>(TEXT("EnemyCombatComponent"));
+
+	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>(TEXT("EnemyUIComponent"));
 }
 
 void AKlotoEnemyCharacter::PossessedBy(AController* NewController)
@@ -37,6 +40,11 @@ void AKlotoEnemyCharacter::PossessedBy(AController* NewController)
 UPawnCombatComponent* AKlotoEnemyCharacter::GetPawnCombatComponent() const
 {
 	return EnemyCombatComponent;
+}
+
+UPawnUIComponent* AKlotoEnemyCharacter::GetPawnUIComponent() const
+{
+	return EnemyUIComponent;
 }
 
 void AKlotoEnemyCharacter::InitEnemyStartUpData()

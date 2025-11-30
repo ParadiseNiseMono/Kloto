@@ -30,6 +30,11 @@ UPawnCombatComponent* AKlotoBaseCharacter::GetPawnCombatComponent() const
 	return nullptr;
 }
 
+UPawnUIComponent* AKlotoBaseCharacter::GetPawnUIComponent() const
+{
+	return nullptr;
+}
+
 void AKlotoBaseCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
