@@ -36,6 +36,7 @@ protected:
 
 	//~ Begin IPawnUIInterface Interface
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	virtual URobotUIComponent* GetRobotUIComponent() const override;
 	//~ End IPawnUIInterface Interface
 private:
 	

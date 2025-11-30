@@ -13,5 +13,8 @@ UCLASS()
 class KLOTO_API URobotUIComponent : public UPawnUIComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FOnPercentChangedDelegate OnCurrentRageChanged;
 };

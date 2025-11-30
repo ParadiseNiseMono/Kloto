@@ -88,6 +88,11 @@ UPawnUIComponent* AKlotoRobotCharacter::GetPawnUIComponent() const
 	return RobotUIComponent;
 }
 
+URobotUIComponent* AKlotoRobotCharacter::GetRobotUIComponent() const
+{
+	return RobotUIComponent;
+}
+
 void AKlotoRobotCharacter::Input_Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();
