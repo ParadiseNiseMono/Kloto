@@ -34,9 +34,10 @@ void URobotCombatComponent::OnHitTargetActor(AActor* HitActor)
 	Data.Instigator = GetOwner();
 	Data.Target = HitActor;
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwner(), KlotoGameplayTags::Shared_Event_MeleeHit, Data);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwner(), KlotoGameplayTags::Player_Event_HitPause, FGameplayEventData());
 }
 
 void URobotCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
 {
-	
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetOwner(), KlotoGameplayTags::Player_Event_HitPause, FGameplayEventData());
 }
