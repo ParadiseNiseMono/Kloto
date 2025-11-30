@@ -18,3 +18,15 @@ void UKlotoWidgetBase::NativeOnInitialized()
 		}
 	}
 }
+
+void UKlotoWidgetBase::InitEnemyCreatedWidget(AActor* OwningEnemyActor)
+{
+	if (IPawnUIInterface* PawnUIInterface = Cast<IPawnUIInterface>(OwningEnemyActor))
+	{
+		UEnemyUIComponent* EnemyUIComponent = PawnUIInterface->GetEnemyUIComponent();
+
+		checkf(EnemyUIComponent, TEXT("Failed to get an EnemyUIComponent form %s"), *OwningEnemyActor->GetActorNameOrLabel());
+
+		BP_OnOwningEnemyUIComponentInitialized(EnemyUIComponent);
+	}
+}

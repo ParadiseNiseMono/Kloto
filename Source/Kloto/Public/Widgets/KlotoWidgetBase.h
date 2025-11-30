@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "KlotoWidgetBase.generated.h"
 
+class UEnemyUIComponent;
 class URobotUIComponent;
 /**
  * 
@@ -20,4 +21,10 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName = "On Owning Robot UI Component Initialized"))
 	void BP_OnOwningRobotUIComponentInitialized(URobotUIComponent* OwningRobotUIComponent);
+
+	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName = "On Owning Enemy UI Component Initialized"))
+	void BP_OnOwningEnemyUIComponentInitialized(UEnemyUIComponent* OwningEnemyUIComponent);
+public:
+	UFUNCTION(BlueprintCallable)
+	void InitEnemyCreatedWidget(AActor* OwningEnemyActor);
 };
