@@ -9,7 +9,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "KlotoDebugHelper.h"
+#include "Components/WidgetComponent.h"
 #include "Components/UI/EnemyUIComponent.h"
+#include "Widgets/KlotoWidgetBase.h"
 
 AKlotoEnemyCharacter::AKlotoEnemyCharacter()
 {
@@ -28,6 +30,19 @@ AKlotoEnemyCharacter::AKlotoEnemyCharacter()
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>(TEXT("EnemyCombatComponent"));
 
 	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>(TEXT("EnemyUIComponent"));
+
+	EnemyHealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("EnemyHealthWidgetComponent"));
+	EnemyHealthWidgetComponent->SetupAttachment(GetMesh());
+}
+
+void AKlotoEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (UKlotoWidgetBase* HealthWidget = Cast<UKlotoWidgetBase>(EnemyHealthWidgetComponent->GetUserWidgetObject()))
+	{
+		HealthWidget->InitEnemyCreatedWidget(this);
+	}
 }
 
 void AKlotoEnemyCharacter::PossessedBy(AController* NewController)

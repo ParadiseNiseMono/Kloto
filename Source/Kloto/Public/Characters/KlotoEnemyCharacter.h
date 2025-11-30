@@ -6,6 +6,7 @@
 #include "Characters/KlotoBaseCharacter.h"
 #include "KlotoEnemyCharacter.generated.h"
 
+class UWidgetComponent;
 class UEnemyUIComponent;
 class UEnemyCombatComponent;
 /**
@@ -20,12 +21,8 @@ public:
 	AKlotoEnemyCharacter();
 	
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
-	UEnemyCombatComponent* EnemyCombatComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
-	UEnemyUIComponent* EnemyUIComponent;
-
+	virtual void BeginPlay() override;
+	
 	//~ Begin APawn	Interface
 	virtual void PossessedBy(AController* NewController) override;
 	//~ End APawn Interface
@@ -38,6 +35,15 @@ protected:
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 	virtual UEnemyUIComponent* GetEnemyUIComponent() const override;
 	//~ End IPawnUIInterface Interface
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	UEnemyCombatComponent* EnemyCombatComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UEnemyUIComponent* EnemyUIComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UWidgetComponent* EnemyHealthWidgetComponent;
 private:
 	void InitEnemyStartUpData();
 public:
