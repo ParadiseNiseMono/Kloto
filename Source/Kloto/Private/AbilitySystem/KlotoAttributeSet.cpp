@@ -4,6 +4,8 @@
 #include "AbilitySystem/KlotoAttributeSet.h"
 #include "GameplayEffectExtension.h"
 #include "KlotoDebugHelper.h"
+#include "KlotoFunctionLibrary.h"
+#include "KlotoGameplayTags.h"
 
 UKlotoAttributeSet::UKlotoAttributeSet()
 {
@@ -42,11 +44,10 @@ void UKlotoAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 		Debug::Print(DebugString);
 
 		//TODO: Notify the UI
-
-		//TODO: Handle character death
+		
 		if (NewCurrentHealth == 0.f)
 		{
-			
+			UKlotoFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), KlotoGameplayTags::Shared_Status_Dead);
 		}
 	}
 }
