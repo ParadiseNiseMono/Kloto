@@ -15,6 +15,6 @@ class KLOTO_API URobotUIComponent : public UPawnUIComponent
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category="PawnUIComponent")
 	FOnPercentChangedDelegate OnCurrentRageChanged;
 };
