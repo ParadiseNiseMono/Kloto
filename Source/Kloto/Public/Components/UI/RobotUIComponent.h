@@ -6,6 +6,8 @@
 #include "Components/UI/PawnUIComponent.h"
 #include "RobotUIComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEquippedWeaponChangedDelegate, TSoftObjectPtr<UTexture2D>, SoftWeaponIcon);
+
 /**
  * 
  */
@@ -17,4 +19,7 @@ class KLOTO_API URobotUIComponent : public UPawnUIComponent
 public:
 	UPROPERTY(BlueprintAssignable, Category="PawnUIComponent")
 	FOnPercentChangedDelegate OnCurrentRageChanged;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnEquippedWeaponChangedDelegate OnEquippedWeaponChanged;
 };
