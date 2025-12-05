@@ -5,6 +5,7 @@
 
 #include "Characters/KlotoBaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "KismetAnimationLibrary.h"
 
 void UKlotoCharacterAnimInstance::NativeInitializeAnimation()
 {
@@ -23,4 +24,5 @@ void UKlotoCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSec
 	GroundSpeed = OwingCharacter->GetVelocity().Size2D();
 
 	bHasAcceleration = OwingMovementComponent->GetCurrentAcceleration().SizeSquared2D() > 0.f;
+	LocomotionDirection = UKismetAnimationLibrary::CalculateDirection(OwingCharacter->GetVelocity(), OwingCharacter->GetActorRotation());
 }
