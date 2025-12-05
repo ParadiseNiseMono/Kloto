@@ -3,7 +3,7 @@
 
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 
-#include "AbilitySystem/Abilities/KlotoGameplayAbility.h"
+#include "AbilitySystem/Abilities/KlotoRobotGameplayAbility.h"
 
 void UKlotoAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InInputTag)
 {
@@ -54,4 +54,26 @@ void UKlotoAbilitySystemComponent::RemoveGrantedRobotWeaponAbilities(
 	}
 
 	InSpecHandleToRemove.Empty();
+}
+
+bool UKlotoAbilitySystemComponent::TryActivateAbilityByTag(FGameplayTag AbilityTagToActivate)
+{
+	check(AbilityTagToActivate.IsValid());
+
+	TArray<FGameplayAbilitySpec*> FoundAbilitySpecs;
+	GetActivatableGameplayAbilitySpecsByAllMatchingTags(AbilityTagToActivate.GetSingleTagContainer(), FoundAbilitySpecs);
+
+	if (!FoundAbilitySpecs.IsEmpty())
+	{
+		const int32 RandomAbilityIndex = FMath::RandRange(0, FoundAbilitySpecs.Num() - 1);
+		FGameplayAbilitySpec* AbilitySpec = FoundAbilitySpecs[RandomAbilityIndex];
+
+		check(AbilitySpec);
+
+		if (!AbilitySpec->IsActive())
+		{
+			return TryActivateAbility(AbilitySpec->Handle);
+		}
+	}
+	return false;
 }
