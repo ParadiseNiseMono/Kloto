@@ -4,6 +4,7 @@
 #include "Items/Weapons/KlotoWeaponBase.h"
 
 #include "KlotoDebugHelper.h"
+#include "KlotoFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -32,11 +33,10 @@ void AKlotoWeaponBase::OnCollisionBoxBeginOverlap(UPrimitiveComponent* Overlappe
 
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (WeaponOwingPawn != HitPawn)
+		if (UKlotoFunctionLibrary::IsTargetPawnHostile(WeaponOwingPawn, HitPawn))
 		{
 			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
-		//TODO: Implement hit check for enemy Characters 
 	}
 }
 
@@ -49,11 +49,10 @@ void AKlotoWeaponBase::OnCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedC
 
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (WeaponOwingPawn != HitPawn)
+		if (UKlotoFunctionLibrary::IsTargetPawnHostile(WeaponOwingPawn, HitPawn))
 		{
 			OnWeaponPulledFromTarget.ExecuteIfBound(OtherActor);
 		}
-		//TODO: Implement hit check for enemy Characters 
 	}
 }
 

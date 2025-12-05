@@ -37,4 +37,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLibary", meta = (DisplayName = "Get Pawn Combat Component From Actor", ExpandEnumAsExecs = "OutValidType"))
 	static UPawnCombatComponent* BP_GetPawnCombatComponentFromActor(AActor* InActor, EKlotoValidType& OutValidType);
+
+	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary")
+	static bool IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn);
 };

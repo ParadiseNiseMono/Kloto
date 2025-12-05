@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "GenericTeamAgentInterface.h"
 #include "Interfaces/PawnCombatInterface.h"
 
 
@@ -67,4 +68,18 @@ UPawnCombatComponent* UKlotoFunctionLibrary::BP_GetPawnCombatComponentFromActor(
 	OutValidType = PawnCombatComponent ? EKlotoValidType::Valid : EKlotoValidType::Invalid;
 
 	return PawnCombatComponent;
+}
+
+bool UKlotoFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn)
+{
+	check(QueryPawn && TargetPawn);
+
+	IGenericTeamAgentInterface* QueryTeamAgent = Cast<IGenericTeamAgentInterface>(QueryPawn->GetController());
+	IGenericTeamAgentInterface* TargetTeamAgent = Cast<IGenericTeamAgentInterface>(TargetPawn->GetController());
+
+	if (QueryTeamAgent && TargetTeamAgent)
+	{
+		return QueryTeamAgent->GetGenericTeamId() != TargetTeamAgent->GetGenericTeamId();
+	}
+	return false;
 }
