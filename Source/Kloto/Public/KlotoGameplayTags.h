@@ -38,6 +38,8 @@ namespace KlotoGameplayTags
 	
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
 
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Status_Strafing);
+
 	/*Shared Tags*/
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Ability_HitReact);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Ability_Death);
