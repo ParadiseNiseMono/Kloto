@@ -3,7 +3,10 @@
 
 #include "AI/BTTask_RotateToFaceTarget.h"
 
+#include "AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BlackboardData.h"
+#include "Kismet/KismetMathLibrary.h"
 
 UBTTask_RotateToFaceTarget::UBTTask_RotateToFaceTarget()
 {
@@ -40,4 +43,59 @@ FString UBTTask_RotateToFaceTarget::GetStaticDescription() const
 	const FString KeyDescription = InTargetToFaceKey.SelectedKeyName.ToString();
 
 	return FString::Printf(TEXT("Smoothly rotates to face %s Key until the angle precision %s is reached"), *KeyDescription, *FString::SanitizeFloat(AnglePrecision));
+}
+
+EBTNodeResult::Type UBTTask_RotateToFaceTarget::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+{
+	UObject* ActorObject = OwnerComp.GetBlackboardComponent()->GetValueAsObject(InTargetToFaceKey.SelectedKeyName);
+	AActor* TargetActor = Cast<AActor>(ActorObject);
+
+	APawn* OwingPawn = OwnerComp.GetAIOwner()->GetPawn();
+	FRotateToFaceTargetTaskMemory* Memory = CastInstanceNodeMemory<FRotateToFaceTargetTaskMemory>(NodeMemory);
+
+	check(Memory);
+	Memory->OwingPawn = OwingPawn;
+	Memory->TargetActor = TargetActor;
+
+	if (!Memory->IsValid()) return EBTNodeResult::Failed;
+
+	if (HasReachedAnglePrecision(OwingPawn, TargetActor))
+	{
+		Memory->Reset();
+		return EBTNodeResult::Succeeded;
+	}
+
+	return EBTNodeResult::InProgress;
+}
+
+void UBTTask_RotateToFaceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
+	FRotateToFaceTargetTaskMemory* Memory = CastInstanceNodeMemory<FRotateToFaceTargetTaskMemory>(NodeMemory);
+
+	if (!Memory->IsValid()) FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+
+	if (HasReachedAnglePrecision(Memory->OwingPawn.Get(), Memory->TargetActor.Get()))
+	{
+		Memory->Reset();
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
+
+	else
+	{
+		const FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(Memory->OwingPawn->GetActorLocation(), Memory->TargetActor->GetActorLocation());
+		const FRotator TargetRot = FMath::RInterpTo(Memory->OwingPawn->GetActorRotation(), LookAtRot, DeltaSeconds, RotationInterpSpeed);
+
+		Memory->OwingPawn->SetActorRotation(TargetRot);
+	}
+}
+
+bool UBTTask_RotateToFaceTarget::HasReachedAnglePrecision(APawn* QueryPawn, AActor* InTargetActor) const
+{
+	const FVector QueryForward = InTargetActor->GetActorForwardVector();
+	const FVector OwnerToTargetNormalized = (QueryPawn->GetActorLocation() - InTargetActor->GetActorLocation()).GetSafeNormal();
+
+	const float DotResult = FVector::DotProduct(QueryForward, OwnerToTargetNormalized);
+	const float AngleDiff = UKismetMathLibrary::DegAcos(DotResult);
+
+	return AngleDiff <= AnglePrecision;
 }
