@@ -7,6 +7,7 @@
 #include "KlotoTypes/KlotoEnumTypes.h"
 #include "KlotoFunctionLibrary.generated.h"
 
+struct FScalableFloat;
 class UPawnCombatComponent;
 
 struct FGameplayTag;
@@ -40,4 +41,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary")
 	static bool IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn);
+
+	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary", meta = (CompactNodeTitle = "Get Value At Level"))
+	static float GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, int32 InLevel = 1);
 };

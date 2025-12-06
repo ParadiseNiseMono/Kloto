@@ -83,3 +83,8 @@ bool UKlotoFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetP
 	}
 	return false;
 }
+
+float UKlotoFunctionLibrary::GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, int32 InLevel)
+{
+	return InScalableFloat.GetValueAtLevel(InLevel);
+}
