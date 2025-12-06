@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "AbilitySystem/KlotoAttributeSet.h"
+#include "MotionWarpingComponent.h"
 
 // Sets default values
 AKlotoBaseCharacter::AKlotoBaseCharacter()
@@ -18,6 +19,8 @@ AKlotoBaseCharacter::AKlotoBaseCharacter()
 	KlotoAbilitySystemComponent = CreateDefaultSubobject<UKlotoAbilitySystemComponent>("KlotoAbilitySystemComponent");
 
 	KlotoAttributeSet = CreateDefaultSubobject<UKlotoAttributeSet>("KlotoAttributeSet");
+
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>("MotionWarpingComponent");
 }
 
 UAbilitySystemComponent* AKlotoBaseCharacter::GetAbilitySystemComponent() const

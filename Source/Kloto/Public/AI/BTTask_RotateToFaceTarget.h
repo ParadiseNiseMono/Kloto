@@ -1,0 +1,50 @@
+// Paradise_NiseMono all rights reserved
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "BehaviorTree/BTTaskNode.h"
+#include "BTTask_RotateToFaceTarget.generated.h"
+
+struct FRotateToFaceTargetTaskMemory
+{
+	TWeakObjectPtr<APawn> OwingPawn;
+	TWeakObjectPtr<AActor> TargetActor;
+
+	bool IsValid() const
+	{
+		return OwingPawn.IsValid() && TargetActor.IsValid();
+	}
+
+	void Reset()
+	{
+		OwingPawn.Reset();
+		TargetActor.Reset();
+	}
+};
+
+/**
+ * 
+ */
+UCLASS()
+class KLOTO_API UBTTask_RotateToFaceTarget : public UBTTaskNode
+{
+	GENERATED_BODY()
+
+	UBTTask_RotateToFaceTarget();
+
+	//~ Begin UBTNode Interface
+	virtual void InitializeFromAsset(UBehaviorTree& Asset) override;
+	virtual uint16 GetInstanceMemorySize() const override;
+	virtual FString GetStaticDescription() const override;
+	//~ End UBTNode Interface
+	
+	UPROPERTY(EditAnywhere, Category = "FaceTarget")
+	float AnglePrecision;
+
+	UPROPERTY(EditAnywhere, Category = "FaceTarget")
+	float RotationInterpSpeed;
+
+	UPROPERTY(EditAnywhere, Category = "FaceTarget")
+	FBlackboardKeySelector InTargetToFaceKey;
+};

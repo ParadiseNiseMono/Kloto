@@ -8,7 +8,18 @@ public class Kloto : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "GameplayTasks", "GameplayAbilities", "AnimGraphRuntime" });
+		PublicDependencyModuleNames.AddRange(new string[] {
+			"Core", 
+			"CoreUObject", 
+			"Engine", 
+			"InputCore", 
+			"EnhancedInput", 
+			"GameplayTags", 
+			"GameplayTasks", 
+			"GameplayAbilities", 
+			"AnimGraphRuntime",
+			"MotionWarping"
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

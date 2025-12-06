@@ -12,6 +12,7 @@
 class UDataAsset_StartUpDataBase;
 class UKlotoAttributeSet;
 class UKlotoAbilitySystemComponent;
+class UMotionWarpingComponent;
 
 UCLASS()
 class KLOTO_API AKlotoBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface, public IPawnUIInterface
@@ -44,7 +45,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UKlotoAttributeSet* KlotoAttributeSet;
-
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MotionWarping")
+	UMotionWarpingComponent* MotionWarpingComponent;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Data")
 	TSoftObjectPtr<UDataAsset_StartUpDataBase> CharacterStartUpData;
 
