@@ -23,6 +23,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	UEnemyCombatComponent* GetEnemyCombatComponentFormActorInfo();
 
+	UFUNCTION(BlueprintPure)
+	FGameplayEffectSpecHandle MakeEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass, const FScalableFloat& InDamageScalableFloat);
 private:
 	TWeakObjectPtr<AKlotoEnemyCharacter> CachedKlotoEnemyCharacter;
 };
