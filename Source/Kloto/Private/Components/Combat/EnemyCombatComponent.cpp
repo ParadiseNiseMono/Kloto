@@ -3,12 +3,38 @@
 
 #include "Components/Combat/EnemyCombatComponent.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "KlotoDebugHelper.h"
+#include "KlotoGameplayTags.h"
 
 void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
-	if (HitActor)
+	if (OverlappedActors.Contains(HitActor)) return;
+
+	OverlappedActors.AddUnique(HitActor);
+
+	//TODO: Implement block check
+	bool bIsValidBlock = false;
+
+	const bool bIsPlayerBlocking = false;
+	const bool bIsMyAttackUnBlockable = false;
+
+	if (bIsPlayerBlocking && !bIsMyAttackUnBlockable)
 	{
-		Debug::Print(TEXT("OnHitTargetActor " + GetOwningPawn()->GetActorNameOrLabel() + HitActor->GetActorNameOrLabel()));
+		//TODO:Check if the block is valid
+	}
+	FGameplayEventData EventData;
+	EventData.Instigator = GetOwningPawn();
+	EventData.Target = HitActor;
+	if (bIsValidBlock)
+	{
+		//TODO:Handle successful block
+	}
+	else
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			GetOwningPawn(),
+			KlotoGameplayTags::Shared_Event_MeleeHit,
+			EventData);
 	}
 }
