@@ -11,8 +11,8 @@
 UBTTask_RotateToFaceTarget::UBTTask_RotateToFaceTarget()
 {
 	NodeName = TEXT("Native Rotate To Face Target");
-	AnglePrecision = 10.f;
-	RotationInterpSpeed = 5.f;
+	AnglePrecision = 45.f;
+	RotationInterpSpeed = 15.f;
 
 	bNotifyTick = true;
 	bNotifyTaskFinished = true;
@@ -91,8 +91,8 @@ void UBTTask_RotateToFaceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uin
 
 bool UBTTask_RotateToFaceTarget::HasReachedAnglePrecision(APawn* QueryPawn, AActor* InTargetActor) const
 {
-	const FVector QueryForward = InTargetActor->GetActorForwardVector();
-	const FVector OwnerToTargetNormalized = (QueryPawn->GetActorLocation() - InTargetActor->GetActorLocation()).GetSafeNormal();
+	const FVector QueryForward = QueryPawn->GetActorForwardVector();
+	const FVector OwnerToTargetNormalized = (InTargetActor->GetActorLocation() - QueryPawn->GetActorLocation()).GetSafeNormal();
 
 	const float DotResult = FVector::DotProduct(QueryForward, OwnerToTargetNormalized);
 	const float AngleDiff = UKismetMathLibrary::DegAcos(DotResult);
