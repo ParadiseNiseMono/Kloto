@@ -13,8 +13,22 @@ void UKlotoAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InI
 	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
 		if (!AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InInputTag)) continue;
-		
-		TryActivateAbility(AbilitySpec.Handle);
+
+		if (InInputTag.MatchesTag(KlotoGameplayTags::InputTag_Toggleable))
+		{
+			if (AbilitySpec.IsActive())
+			{
+				CancelAbilityHandle(AbilitySpec.Handle);
+			}
+			else
+			{
+				TryActivateAbility(AbilitySpec.Handle);
+			}
+		}
+		else
+		{
+			TryActivateAbility(AbilitySpec.Handle);
+		}
 	}
 }
 
