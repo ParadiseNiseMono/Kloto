@@ -22,16 +22,20 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 
 	if (bIsPlayerBlocking && !bIsMyAttackUnBlockable)
 	{
-		UKlotoFunctionLibrary::IsValidBlock(GetOwningPawn(), HitActor);
+		bIsValidBlock = UKlotoFunctionLibrary::IsValidBlock(GetOwningPawn(), HitActor);
 	}
 	FGameplayEventData EventData;
 	EventData.Instigator = GetOwningPawn();
 	EventData.Target = HitActor;
 	if (bIsValidBlock)
 	{
-		//TODO:Handle successful block
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			HitActor,
+			KlotoGameplayTags::Player_Event_SuccessfulBlock,
+			EventData
+			);
 	}
-	else if (!bIsPlayerBlocking || !bIsMyAttackUnBlockable || !bIsValidBlock)
+	else
 	{
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
 			GetOwningPawn(),
