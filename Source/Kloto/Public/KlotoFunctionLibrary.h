@@ -47,4 +47,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary")
 	static FGameplayTag ComputeHitReactDirectionTag(AActor* InAttacker, AActor* InVictim, float& OutAngleDifference);
+
+	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary")
+	static bool IsValidBlock(AActor* InAttacker, AActor* InDefender);
 };

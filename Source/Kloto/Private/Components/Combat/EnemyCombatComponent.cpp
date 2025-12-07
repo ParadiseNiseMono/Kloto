@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "KlotoDebugHelper.h"
+#include "KlotoFunctionLibrary.h"
 #include "KlotoGameplayTags.h"
 
 void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
@@ -16,12 +17,12 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 	//TODO: Implement block check
 	bool bIsValidBlock = false;
 
-	const bool bIsPlayerBlocking = false;
+	const bool bIsPlayerBlocking = UKlotoFunctionLibrary::NativeDoesActorHasTag(HitActor, KlotoGameplayTags::Player_Status_Blocking);
 	const bool bIsMyAttackUnBlockable = false;
 
 	if (bIsPlayerBlocking && !bIsMyAttackUnBlockable)
 	{
-		//TODO:Check if the block is valid
+		UKlotoFunctionLibrary::IsValidBlock(GetOwningPawn(), HitActor);
 	}
 	FGameplayEventData EventData;
 	EventData.Instigator = GetOwningPawn();
@@ -30,7 +31,7 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 	{
 		//TODO:Handle successful block
 	}
-	else
+	else if (!bIsPlayerBlocking || !bIsMyAttackUnBlockable || !bIsValidBlock)
 	{
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
 			GetOwningPawn(),

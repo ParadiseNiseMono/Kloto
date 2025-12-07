@@ -6,6 +6,7 @@
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GenericTeamAgentInterface.h"
+#include "KlotoDebugHelper.h"
 #include "KlotoGameplayTags.h"
 #include "Interfaces/PawnCombatInterface.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -127,4 +128,16 @@ FGameplayTag UKlotoFunctionLibrary::ComputeHitReactDirectionTag(AActor* InAttack
 	}
 
 	return KlotoGameplayTags::Shared_Status_HitReact_Front;
+}
+
+bool UKlotoFunctionLibrary::IsValidBlock(AActor* InAttacker, AActor* InDefender)
+{
+	check(InAttacker && InDefender);
+
+	const float DotResult = FVector::DotProduct(InAttacker->GetActorForwardVector(), InDefender->GetActorForwardVector());
+
+	const FString DebugString = FString::Printf(TEXT("DotResult = %f %s"), DotResult, DotResult < 0.1f ? TEXT("Valid Block") : TEXT("In Valid Block"));
+
+	Debug::Print(DebugString);
+	return DotResult < 0.1f;
 }
