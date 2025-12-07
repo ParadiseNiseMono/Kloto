@@ -44,4 +44,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary", meta = (CompactNodeTitle = "Get Value At Level"))
 	static float GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, int32 InLevel = 1);
+
+	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary")
+	static FGameplayTag ComputeHitReactDirectionTag(AActor* InAttacker, AActor* InVictim, float& OutAngleDifference);
 };
