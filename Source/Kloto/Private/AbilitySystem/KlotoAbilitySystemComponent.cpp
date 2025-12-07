@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 
+#include "KlotoGameplayTags.h"
 #include "AbilitySystem/Abilities/KlotoRobotGameplayAbility.h"
 
 void UKlotoAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InInputTag)
@@ -19,7 +20,15 @@ void UKlotoAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InI
 
 void UKlotoAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& InInputTag)
 {
-	
+	if (!InInputTag.IsValid() || !InInputTag.MatchesTag(KlotoGameplayTags::InputTag_MustBeHeld)) return;
+
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InInputTag) && AbilitySpec.IsActive())
+		{
+			CancelAbilityHandle(AbilitySpec.Handle);
+		}
+	}
 }
 
 void UKlotoAbilitySystemComponent::GrantRobotWeaponAbilities(const TArray<FKlotoRobotAbilitySet>& InDefaultWeaponAbilities,
