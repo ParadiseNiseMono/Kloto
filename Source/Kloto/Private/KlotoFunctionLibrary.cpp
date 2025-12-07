@@ -6,6 +6,7 @@
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GenericTeamAgentInterface.h"
+#include "KlotoGameplayTags.h"
 #include "Interfaces/PawnCombatInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -108,5 +109,22 @@ FGameplayTag UKlotoFunctionLibrary::ComputeHitReactDirectionTag(AActor* InAttack
 		OutAngleDifference *= -1.0f;
 	}
 
-	return FGameplayTag();
+	if (OutAngleDifference >= -45.f && OutAngleDifference <= 45.f)
+	{
+		return KlotoGameplayTags::Shared_Status_HitReact_Front;
+	}
+	else if (OutAngleDifference > 45.f && OutAngleDifference < 135.f)
+	{
+		return KlotoGameplayTags::Shared_Status_HitReact_Right;
+	}
+	else if (OutAngleDifference >= 135.f || OutAngleDifference < -135.f)
+	{
+		return KlotoGameplayTags::Shared_Status_HitReact_Back;
+	}
+	else if (OutAngleDifference >= -135.f && OutAngleDifference < -45.f)
+	{
+		return KlotoGameplayTags::Shared_Status_HitReact_Left;
+	}
+
+	return KlotoGameplayTags::Shared_Status_HitReact_Front;
 }
