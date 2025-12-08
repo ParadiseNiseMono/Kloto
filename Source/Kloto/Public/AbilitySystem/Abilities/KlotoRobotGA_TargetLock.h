@@ -6,6 +6,7 @@
 #include "AbilitySystem/Abilities/KlotoRobotGameplayAbility.h"
 #include "KlotoRobotGA_TargetLock.generated.h"
 
+class UKlotoWidgetBase;
 /**
  * 
  */
@@ -25,6 +26,14 @@ private:
 
 	void GetAvailableActorsToLock();
 
+	void CancelTargetLockAbility();
+
+	void CleanUp();
+
+	void DrawTargetLockWidget();
+
+	AActor* GetNearestTargetFromAvailableActors(const TArray<AActor*>& InAvailableActors);
+
 	UPROPERTY(EditDefaultsOnly, Category = "TargetLock")
 	float BoxTraceDistance = 5000.f;
 
@@ -37,6 +46,15 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "TargetLock")
 	bool bShowPersistentDebugShape = false;
 
+	UPROPERTY(EditDefaultsOnly, Category = "TargetLock")
+	TSubclassOf<UKlotoWidgetBase> TargetLockWidgetClass;
+	
 	UPROPERTY()
 	TArray<AActor*> AvailableActorsToLock;
+
+	UPROPERTY()
+	AActor* CurrentLockedActor;
+
+	UPROPERTY()
+	UKlotoWidgetBase* DrawnTargetLockWidget;
 };

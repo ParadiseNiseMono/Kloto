@@ -5,7 +5,10 @@
 
 #include "KlotoDebugHelper.h"
 #include "Characters/KlotoRobotCharacter.h"
+#include "Controllers/KlotoRobotController.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Widgets/KlotoWidgetBase.h"
 
 void UKlotoRobotGA_TargetLock::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                                const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -20,12 +23,29 @@ void UKlotoRobotGA_TargetLock::EndAbility(const FGameplayAbilitySpecHandle Handl
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
+	CleanUp();
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 void UKlotoRobotGA_TargetLock::TryLockOnTarget()
 {
 	GetAvailableActorsToLock();
+
+	if (AvailableActorsToLock.IsEmpty())
+	{
+		CancelTargetLockAbility();
+		return;
+	}
+	CurrentLockedActor = GetNearestTargetFromAvailableActors(AvailableActorsToLock);
+
+	if (CurrentLockedActor)
+	{
+		DrawTargetLockWidget();
+	}
+	else
+	{
+		CancelTargetLockAbility();
+	}
 }
 
 void UKlotoRobotGA_TargetLock::GetAvailableActorsToLock()
@@ -53,9 +73,42 @@ void UKlotoRobotGA_TargetLock::GetAvailableActorsToLock()
 			if (HitActor != GetRobotCharacterFromActorInfo())
 			{
 				AvailableActorsToLock.AddUnique(HitActor);
-
-				Debug::Print(HitActor->GetActorNameOrLabel());
 			}
 		}
 	}
+}
+
+void UKlotoRobotGA_TargetLock::CancelTargetLockAbility()
+{
+	CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
+}
+
+void UKlotoRobotGA_TargetLock::CleanUp()
+{
+	AvailableActorsToLock.Empty();
+	CurrentLockedActor = nullptr;
+	if (DrawnTargetLockWidget)
+	{
+		DrawnTargetLockWidget->RemoveFromParent();
+	}
+}
+
+void UKlotoRobotGA_TargetLock::DrawTargetLockWidget()
+{
+	if (!DrawnTargetLockWidget)
+	{
+		checkf(TargetLockWidgetClass, TEXT("Forgot to assign a valid widget class in blueprint"));
+
+		DrawnTargetLockWidget = CreateWidget<UKlotoWidgetBase>(GetRobotControllerFromActorInfo(), TargetLockWidgetClass);
+
+		check(DrawnTargetLockWidget);
+	
+		DrawnTargetLockWidget->AddToViewport();
+	}
+}
+
+AActor* UKlotoRobotGA_TargetLock::GetNearestTargetFromAvailableActors(const TArray<AActor*>& InAvailableActors)
+{
+	float ClosestDistance = BIG_NUMBER;
+	return UGameplayStatics::FindNearestActor(GetAvatarActorFromActorInfo()->GetActorLocation(), InAvailableActors, ClosestDistance);
 }
