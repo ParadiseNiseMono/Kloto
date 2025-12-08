@@ -23,14 +23,11 @@ protected:
 
 private:
 	void TryLockOnTarget();
-
 	void GetAvailableActorsToLock();
-
 	void CancelTargetLockAbility();
-
 	void CleanUp();
-
 	void DrawTargetLockWidget();
+	void SetTargetLockWidgetPosition();
 
 	AActor* GetNearestTargetFromAvailableActors(const TArray<AActor*>& InAvailableActors);
 
@@ -57,4 +54,7 @@ private:
 
 	UPROPERTY()
 	UKlotoWidgetBase* DrawnTargetLockWidget;
+
+	UPROPERTY()
+	FVector2D DrawnTargetLockWidgetSize = FVector2D::ZeroVector;
 };

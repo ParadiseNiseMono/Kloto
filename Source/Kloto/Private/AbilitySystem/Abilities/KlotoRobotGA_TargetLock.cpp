@@ -4,7 +4,11 @@
 #include "AbilitySystem/Abilities/KlotoRobotGA_TargetLock.h"
 
 #include "KlotoDebugHelper.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "Blueprint/WidgetTree.h"
 #include "Characters/KlotoRobotCharacter.h"
+#include "Components/SizeBox.h"
 #include "Controllers/KlotoRobotController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -41,6 +45,8 @@ void UKlotoRobotGA_TargetLock::TryLockOnTarget()
 	if (CurrentLockedActor)
 	{
 		DrawTargetLockWidget();
+
+		SetTargetLockWidgetPosition();
 	}
 	else
 	{
@@ -98,13 +104,46 @@ void UKlotoRobotGA_TargetLock::DrawTargetLockWidget()
 	if (!DrawnTargetLockWidget)
 	{
 		checkf(TargetLockWidgetClass, TEXT("Forgot to assign a valid widget class in blueprint"));
-
+		
 		DrawnTargetLockWidget = CreateWidget<UKlotoWidgetBase>(GetRobotControllerFromActorInfo(), TargetLockWidgetClass);
 
 		check(DrawnTargetLockWidget);
 	
 		DrawnTargetLockWidget->AddToViewport();
 	}
+}
+
+void UKlotoRobotGA_TargetLock::SetTargetLockWidgetPosition()
+{
+	if (!DrawnTargetLockWidget || !CurrentLockedActor)
+	{
+		CancelTargetLockAbility();
+		return;
+	}
+
+	FVector2D ScreenPosition;
+	UWidgetLayoutLibrary::ProjectWorldLocationToWidgetPosition(
+		GetRobotControllerFromActorInfo(),
+		CurrentLockedActor->GetActorLocation(),
+		ScreenPosition,
+		true
+		);
+	if (DrawnTargetLockWidgetSize == FVector2D::ZeroVector)
+	{
+		DrawnTargetLockWidget->WidgetTree->ForEachWidget(
+		[this](UWidget* Widget)
+			{
+				if (USizeBox* FoundSizeBox = Cast<USizeBox>(Widget))
+				{
+					DrawnTargetLockWidgetSize.X = FoundSizeBox->GetWidthOverride();
+					DrawnTargetLockWidgetSize.Y = FoundSizeBox->GetHeightOverride();
+				}
+			});
+	}
+
+	ScreenPosition -= DrawnTargetLockWidgetSize / 2.f;
+
+	DrawnTargetLockWidget->SetPositionInViewport(ScreenPosition, false);
 }
 
 AActor* UKlotoRobotGA_TargetLock::GetNearestTargetFromAvailableActors(const TArray<AActor*>& InAvailableActors)
