@@ -13,6 +13,7 @@
 #include "Components/SizeBox.h"
 #include "Controllers/KlotoRobotController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Widgets/KlotoWidgetBase.h"
 
@@ -44,6 +45,22 @@ void UKlotoRobotGA_TargetLock::OnTargetLockTick(float DeltaTime)
 	}
 
 	SetTargetLockWidgetPosition();
+
+	const bool bShouldOverrideRotation =
+		!UKlotoFunctionLibrary::NativeDoesActorHasTag(GetRobotCharacterFromActorInfo(), KlotoGameplayTags::Player_Status_Rolling) &&
+			!UKlotoFunctionLibrary::NativeDoesActorHasTag(GetRobotCharacterFromActorInfo(), KlotoGameplayTags::Player_Status_Blocking);
+
+	if (bShouldOverrideRotation)
+	{
+		const FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(
+			GetRobotCharacterFromActorInfo()->GetActorLocation(), CurrentLockedActor->GetActorLocation());
+
+		const FRotator CurrentRot = GetRobotControllerFromActorInfo()->GetControlRotation();
+		const FRotator TargetRot = FMath::RInterpTo(CurrentRot, LookAtRot, DeltaTime, TargetLockRotationInterpSpeed);
+
+		GetRobotControllerFromActorInfo()->SetControlRotation(FRotator(TargetRot.Pitch, TargetRot.Yaw, 0.f));
+		GetRobotCharacterFromActorInfo()->SetActorRotation(FRotator(0.f, TargetRot.Yaw, 0.f));
+	}
 }
 
 void UKlotoRobotGA_TargetLock::TryLockOnTarget()
