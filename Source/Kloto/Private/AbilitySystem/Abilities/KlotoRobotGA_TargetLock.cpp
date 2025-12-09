@@ -4,6 +4,8 @@
 #include "AbilitySystem/Abilities/KlotoRobotGA_TargetLock.h"
 
 #include "KlotoDebugHelper.h"
+#include "KlotoFunctionLibrary.h"
+#include "KlotoGameplayTags.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Blueprint/WidgetTree.h"
@@ -29,6 +31,19 @@ void UKlotoRobotGA_TargetLock::EndAbility(const FGameplayAbilitySpecHandle Handl
 {
 	CleanUp();
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+void UKlotoRobotGA_TargetLock::OnTargetLockTick(float DeltaTime)
+{
+	if (!CurrentLockedActor ||
+		UKlotoFunctionLibrary::NativeDoesActorHasTag(CurrentLockedActor, KlotoGameplayTags::Shared_Ability_Death) ||
+		UKlotoFunctionLibrary::NativeDoesActorHasTag(GetRobotCharacterFromActorInfo(), KlotoGameplayTags::Shared_Ability_Death))
+	{
+		CancelTargetLockAbility();
+		return;
+	}
+
+	SetTargetLockWidgetPosition();
 }
 
 void UKlotoRobotGA_TargetLock::TryLockOnTarget()
@@ -97,6 +112,8 @@ void UKlotoRobotGA_TargetLock::CleanUp()
 	{
 		DrawnTargetLockWidget->RemoveFromParent();
 	}
+	DrawnTargetLockWidget = nullptr;
+	DrawnTargetLockWidgetSize = FVector2D::ZeroVector;
 }
 
 void UKlotoRobotGA_TargetLock::DrawTargetLockWidget()
