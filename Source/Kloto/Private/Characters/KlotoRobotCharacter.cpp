@@ -3,11 +3,13 @@
 
 #include "Characters/KlotoRobotCharacter.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "KlotoDebugHelper.h"
 #include "KlotoGameplayTags.h"
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "Components/Combat/RobotCombatComponent.h"
@@ -133,12 +135,18 @@ void AKlotoRobotCharacter::Input_Look(const FInputActionValue& InputActionValue)
 
 void AKlotoRobotCharacter::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
 {
-	
+	SwitchDirection = InputActionValue.Get<FVector2D>();
 }
 
 void AKlotoRobotCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue)
 {
-	
+	FGameplayEventData Data;
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this,
+		SwitchDirection.X > 0.f ? KlotoGameplayTags::Player_Event_SwitchTarget_Right : KlotoGameplayTags::Player_Event_SwitchTarget_Left,
+		Data
+		);
+	Debug::Print(TEXT("Switch Direction: %f"), SwitchDirection.X);
 }
 
 void AKlotoRobotCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
