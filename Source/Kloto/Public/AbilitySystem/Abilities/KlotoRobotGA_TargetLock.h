@@ -29,7 +29,7 @@ protected:
 	void SwitchTarget(const FGameplayTag& InSwitchDirectionTag);
 
 private:
-	void TryLockOnTarget();
+	bool TryLockOnTarget();
 	void GetAvailableActorsToLock();
 	void DrawTargetLockWidget();
 	void SetTargetLockWidgetPosition();

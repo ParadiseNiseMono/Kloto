@@ -24,9 +24,16 @@ void UKlotoRobotGA_TargetLock::ActivateAbility(const FGameplayAbilitySpecHandle 
                                                const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                                const FGameplayEventData* TriggerEventData)
 {
-	TryLockOnTarget();
-	InitTargetLockMovement();
-	InitTargetLockMappingContext();
+	if (TryLockOnTarget())
+	{
+		InitTargetLockMovement();
+		InitTargetLockMappingContext();
+	}
+	else
+	{
+		CancelTargetLockAbility();
+	}
+	
 	
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
@@ -103,14 +110,14 @@ void UKlotoRobotGA_TargetLock::SwitchTarget(const FGameplayTag& InSwitchDirectio
 	}
 }
 
-void UKlotoRobotGA_TargetLock::TryLockOnTarget()
+bool UKlotoRobotGA_TargetLock::TryLockOnTarget()
 {
 	GetAvailableActorsToLock();
 
 	if (AvailableActorsToLock.IsEmpty())
 	{
 		CancelTargetLockAbility();
-		return;
+		return false;
 	}
 	CurrentLockedActor = GetNearestTargetFromAvailableActors(AvailableActorsToLock);
 
@@ -120,10 +127,12 @@ void UKlotoRobotGA_TargetLock::TryLockOnTarget()
 
 		SetTargetLockWidgetPosition();
 		Debug::Print(CurrentLockedActor->GetActorNameOrLabel());
+		return true;
 	}
 	else
 	{
 		CancelTargetLockAbility();
+		return false;
 	}
 }
 
