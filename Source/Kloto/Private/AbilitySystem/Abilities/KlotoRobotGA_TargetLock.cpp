@@ -60,8 +60,10 @@ void UKlotoRobotGA_TargetLock::OnTargetLockTick(float DeltaTime)
 
 	if (bShouldOverrideRotation)
 	{
-		const FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(
+		FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(
 			GetRobotCharacterFromActorInfo()->GetActorLocation(), CurrentLockedActor->GetActorLocation());
+
+		LookAtRot -= FRotator(TargetLockCameraOffsetDistance, 0.0f, 0.0f);
 
 		const FRotator CurrentRot = GetRobotControllerFromActorInfo()->GetControlRotation();
 		const FRotator TargetRot = FMath::RInterpTo(CurrentRot, LookAtRot, DeltaTime, TargetLockRotationInterpSpeed);
@@ -74,6 +76,12 @@ void UKlotoRobotGA_TargetLock::OnTargetLockTick(float DeltaTime)
 void UKlotoRobotGA_TargetLock::SwitchTarget(const FGameplayTag& InSwitchDirectionTag)
 {
 	GetAvailableActorsToLock();
+
+	if (AvailableActorsToLock.IsEmpty())
+	{
+		CancelTargetLockAbility();
+		return;
+	}
 
 	TArray<AActor*> ActorsOnLeft, ActorsOnRight;
 	AActor* NewActorToLock = nullptr;
@@ -111,6 +119,7 @@ void UKlotoRobotGA_TargetLock::TryLockOnTarget()
 		DrawTargetLockWidget();
 
 		SetTargetLockWidgetPosition();
+		Debug::Print(CurrentLockedActor->GetActorNameOrLabel());
 	}
 	else
 	{
@@ -122,6 +131,8 @@ void UKlotoRobotGA_TargetLock::GetAvailableActorsToLock()
 {
 	AvailableActorsToLock.Empty();
 	TArray<FHitResult> OutHits;
+	TArray<AActor*> IgnoreActors;
+	IgnoreActors.Add(GetRobotCharacterFromActorInfo());
 
 	UKismetSystemLibrary::BoxTraceMultiForObjects(
 		GetRobotCharacterFromActorInfo(),
@@ -131,7 +142,7 @@ void UKlotoRobotGA_TargetLock::GetAvailableActorsToLock()
 		GetRobotCharacterFromActorInfo()->GetActorLocation().ToOrientationRotator(),
 		BoxTraceChannel,
 		false,
-		TArray<AActor*>(),
+		IgnoreActors,
 		bShowPersistentDebugShape ? EDrawDebugTrace::Persistent : EDrawDebugTrace::None,
 		OutHits,
 		true

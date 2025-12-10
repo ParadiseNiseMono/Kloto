@@ -146,7 +146,6 @@ void AKlotoRobotCharacter::Input_SwitchTargetCompleted(const FInputActionValue& 
 		SwitchDirection.X > 0.f ? KlotoGameplayTags::Player_Event_SwitchTarget_Right : KlotoGameplayTags::Player_Event_SwitchTarget_Left,
 		Data
 		);
-	Debug::Print(TEXT("Switch Direction: %f"), SwitchDirection.X);
 }
 
 void AKlotoRobotCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
