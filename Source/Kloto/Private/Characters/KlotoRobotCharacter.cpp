@@ -75,6 +75,9 @@ void AKlotoRobotCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Triggered, this, &ThisClass::Input_SwitchTargetTriggered);
+	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Completed, this, &ThisClass::Input_SwitchTargetCompleted);
+	
 	KlotoInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
 
@@ -126,6 +129,16 @@ void AKlotoRobotCharacter::Input_Look(const FInputActionValue& InputActionValue)
 	{
 		AddControllerPitchInput(LookAxisVector.Y);	
 	}
+}
+
+void AKlotoRobotCharacter::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
+{
+	
+}
+
+void AKlotoRobotCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue)
+{
+	
 }
 
 void AKlotoRobotCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
