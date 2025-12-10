@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/Abilities/KlotoRobotGA_TargetLock.h"
 
+#include "EnhancedInputSubsystems.h"
 #include "KlotoDebugHelper.h"
 #include "KlotoFunctionLibrary.h"
 #include "KlotoGameplayTags.h"
@@ -25,6 +26,8 @@ void UKlotoRobotGA_TargetLock::ActivateAbility(const FGameplayAbilitySpecHandle 
 {
 	TryLockOnTarget();
 	InitTargetLockMovement();
+	InitTargetLockMappingContext();
+	
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
@@ -33,6 +36,7 @@ void UKlotoRobotGA_TargetLock::EndAbility(const FGameplayAbilitySpecHandle Handl
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
 	ResetTargetLockMovement();
+	ResetTargetLockMappingContext();
 	CleanUp();
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
@@ -190,6 +194,26 @@ void UKlotoRobotGA_TargetLock::InitTargetLockMovement()
 	CachedDefaultMaxWalkSpeed = GetRobotCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed;
 
 	GetRobotCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed = TargetLockMaxWalkSpeed;
+}
+
+void UKlotoRobotGA_TargetLock::InitTargetLockMappingContext()
+{
+	ULocalPlayer* LocalPlayer = GetRobotControllerFromActorInfo()->GetLocalPlayer();
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+
+	check(Subsystem);
+	Subsystem->AddMappingContext(TargetLockMappingContext, 3);
+}
+
+void UKlotoRobotGA_TargetLock::ResetTargetLockMappingContext()
+{
+	if (!GetRobotControllerFromActorInfo()) return;
+
+	ULocalPlayer* LocalPlayer = GetRobotControllerFromActorInfo()->GetLocalPlayer();
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+
+	check(Subsystem);
+	Subsystem->RemoveMappingContext(TargetLockMappingContext);
 }
 
 void UKlotoRobotGA_TargetLock::ResetTargetLockMovement()

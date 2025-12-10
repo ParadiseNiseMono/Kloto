@@ -6,6 +6,7 @@
 #include "AbilitySystem/Abilities/KlotoRobotGameplayAbility.h"
 #include "KlotoRobotGA_TargetLock.generated.h"
 
+class UInputMappingContext;
 class UKlotoWidgetBase;
 /**
  * 
@@ -30,10 +31,12 @@ private:
 	void DrawTargetLockWidget();
 	void SetTargetLockWidgetPosition();
 	void InitTargetLockMovement();
+	void InitTargetLockMappingContext();
 
 	void CancelTargetLockAbility();
 	void CleanUp();
 	void ResetTargetLockMovement();
+	void ResetTargetLockMappingContext();
 	
 	AActor* GetNearestTargetFromAvailableActors(const TArray<AActor*>& InAvailableActors);
 
@@ -57,6 +60,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "TargetLock")
 	float TargetLockMaxWalkSpeed = 100.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "TargetLock")
+	UInputMappingContext* TargetLockMappingContext;
 	
 	UPROPERTY()
 	TArray<AActor*> AvailableActorsToLock;
