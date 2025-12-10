@@ -25,6 +25,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnTargetLockTick(float DeltaTime);
 
+	UFUNCTION(BlueprintCallable)
+	void SwitchTarget(const FGameplayTag& InSwitchDirectionTag);
+
 private:
 	void TryLockOnTarget();
 	void GetAvailableActorsToLock();
@@ -39,6 +42,7 @@ private:
 	void ResetTargetLockMappingContext();
 	
 	AActor* GetNearestTargetFromAvailableActors(const TArray<AActor*>& InAvailableActors);
+	void GetAvailableActorsAroundTarget(TArray<AActor*>& OutActorsOnLeft, TArray<AActor*>& OutActorsOnRight);
 
 	UPROPERTY(EditDefaultsOnly, Category = "TargetLock")
 	float BoxTraceDistance = 5000.f;

@@ -71,6 +71,30 @@ void UKlotoRobotGA_TargetLock::OnTargetLockTick(float DeltaTime)
 	}
 }
 
+void UKlotoRobotGA_TargetLock::SwitchTarget(const FGameplayTag& InSwitchDirectionTag)
+{
+	GetAvailableActorsToLock();
+
+	TArray<AActor*> ActorsOnLeft, ActorsOnRight;
+	AActor* NewActorToLock = nullptr;
+	
+	GetAvailableActorsAroundTarget(ActorsOnLeft, ActorsOnRight);
+
+	if (InSwitchDirectionTag.MatchesTagExact(KlotoGameplayTags::Player_Event_SwitchTarget_Right))
+	{
+		NewActorToLock = GetNearestTargetFromAvailableActors(ActorsOnRight);
+	}
+	else
+	{
+		NewActorToLock = GetNearestTargetFromAvailableActors(ActorsOnLeft);
+	}
+
+	if (NewActorToLock != nullptr)
+	{
+		CurrentLockedActor = NewActorToLock;
+	}
+}
+
 void UKlotoRobotGA_TargetLock::TryLockOnTarget()
 {
 	GetAvailableActorsToLock();
@@ -96,6 +120,7 @@ void UKlotoRobotGA_TargetLock::TryLockOnTarget()
 
 void UKlotoRobotGA_TargetLock::GetAvailableActorsToLock()
 {
+	AvailableActorsToLock.Empty();
 	TArray<FHitResult> OutHits;
 
 	UKismetSystemLibrary::BoxTraceMultiForObjects(
@@ -228,4 +253,35 @@ AActor* UKlotoRobotGA_TargetLock::GetNearestTargetFromAvailableActors(const TArr
 {
 	float ClosestDistance = BIG_NUMBER;
 	return UGameplayStatics::FindNearestActor(GetAvatarActorFromActorInfo()->GetActorLocation(), InAvailableActors, ClosestDistance);
+}
+
+void UKlotoRobotGA_TargetLock::GetAvailableActorsAroundTarget(TArray<AActor*>& OutActorsOnLeft,
+	TArray<AActor*>& OutActorsOnRight)
+{
+	if (!CurrentLockedActor || AvailableActorsToLock.IsEmpty())
+	{
+		CancelTargetLockAbility();
+		return;
+	}
+
+	const FVector PlayerLocation = GetRobotCharacterFromActorInfo()->GetActorLocation();
+	const FVector PlayerToCurrentTargetNormalized = (CurrentLockedActor->GetActorLocation() - PlayerLocation).GetSafeNormal();
+
+	for (AActor* AvailableActor : AvailableActorsToLock)
+	{
+		if (!AvailableActor || AvailableActor == CurrentLockedActor) continue;
+
+		const FVector PlayerToAvailableActorNormalized = (AvailableActor->GetActorLocation() - PlayerLocation).GetSafeNormal();
+
+		const FVector CrossResult = FVector::CrossProduct(PlayerToCurrentTargetNormalized, PlayerToAvailableActorNormalized);
+
+		if (CrossResult.Z > 0.f)
+		{
+			OutActorsOnRight.AddUnique(AvailableActor);
+		}
+		else
+		{
+			OutActorsOnLeft.AddUnique(AvailableActor);
+		}
+	}
 }
