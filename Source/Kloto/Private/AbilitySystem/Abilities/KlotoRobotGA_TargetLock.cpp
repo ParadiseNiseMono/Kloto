@@ -12,6 +12,8 @@
 #include "Characters/KlotoRobotCharacter.h"
 #include "Components/SizeBox.h"
 #include "Controllers/KlotoRobotController.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -22,7 +24,7 @@ void UKlotoRobotGA_TargetLock::ActivateAbility(const FGameplayAbilitySpecHandle 
                                                const FGameplayEventData* TriggerEventData)
 {
 	TryLockOnTarget();
-	
+	InitTargetLockMovement();
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
@@ -30,7 +32,9 @@ void UKlotoRobotGA_TargetLock::EndAbility(const FGameplayAbilitySpecHandle Handl
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
+	ResetTargetLockMovement();
 	CleanUp();
+	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
@@ -131,6 +135,7 @@ void UKlotoRobotGA_TargetLock::CleanUp()
 	}
 	DrawnTargetLockWidget = nullptr;
 	DrawnTargetLockWidgetSize = FVector2D::ZeroVector;
+	CachedDefaultMaxWalkSpeed = 0.f;
 }
 
 void UKlotoRobotGA_TargetLock::DrawTargetLockWidget()
@@ -178,6 +183,21 @@ void UKlotoRobotGA_TargetLock::SetTargetLockWidgetPosition()
 	ScreenPosition -= DrawnTargetLockWidgetSize / 2.f;
 
 	DrawnTargetLockWidget->SetPositionInViewport(ScreenPosition, false);
+}
+
+void UKlotoRobotGA_TargetLock::InitTargetLockMovement()
+{
+	CachedDefaultMaxWalkSpeed = GetRobotCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed;
+
+	GetRobotCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed = TargetLockMaxWalkSpeed;
+}
+
+void UKlotoRobotGA_TargetLock::ResetTargetLockMovement()
+{
+	if (CachedDefaultMaxWalkSpeed > 0.f)
+	{
+		GetRobotCharacterFromActorInfo()->GetCharacterMovement()->MaxWalkSpeed = CachedDefaultMaxWalkSpeed;
+	}
 }
 
 AActor* UKlotoRobotGA_TargetLock::GetNearestTargetFromAvailableActors(const TArray<AActor*>& InAvailableActors)
