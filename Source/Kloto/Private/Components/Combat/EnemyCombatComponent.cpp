@@ -1,4 +1,4 @@
-// Paradise_NiseMono all rights reserved
+	// Paradise_NiseMono all rights reserved
 
 
 #include "Components/Combat/EnemyCombatComponent.h"
@@ -18,7 +18,7 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 	bool bIsValidBlock = false;
 
 	const bool bIsPlayerBlocking = UKlotoFunctionLibrary::NativeDoesActorHasTag(HitActor, KlotoGameplayTags::Player_Status_Blocking);
-	const bool bIsMyAttackUnBlockable = false;
+	const bool bIsMyAttackUnBlockable = UKlotoFunctionLibrary::NativeDoesActorHasTag(GetOwningPawn(), KlotoGameplayTags::Enemy_Status_Unblockable);
 
 	if (bIsPlayerBlocking && !bIsMyAttackUnBlockable)
 	{
