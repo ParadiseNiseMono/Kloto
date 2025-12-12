@@ -7,6 +7,7 @@
 #include "KlotoTypes/KlotoEnumTypes.h"
 #include "KlotoFunctionLibrary.generated.h"
 
+struct FGameplayEffectSpecHandle;
 struct FScalableFloat;
 class UPawnCombatComponent;
 
@@ -50,4 +51,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary")
 	static bool IsValidBlock(AActor* InAttacker, AActor* InDefender);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLibary")
+	static bool ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor, const FGameplayEffectSpecHandle& InSpecHandle);
 };

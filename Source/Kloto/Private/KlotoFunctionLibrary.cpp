@@ -141,3 +141,14 @@ bool UKlotoFunctionLibrary::IsValidBlock(AActor* InAttacker, AActor* InDefender)
 	Debug::Print(DebugString);
 	return DotResult < 0.1f;
 }
+
+bool UKlotoFunctionLibrary::ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor,
+	const FGameplayEffectSpecHandle& InSpecHandle)
+{
+	UKlotoAbilitySystemComponent* InstigatorASC = NativeGetKlotoAscFromActor(InInstigator);
+	UKlotoAbilitySystemComponent* TargetASC = NativeGetKlotoAscFromActor(InTargetActor);
+
+	FActiveGameplayEffectHandle ActiveGameplayEffectHandle = InstigatorASC->ApplyGameplayEffectSpecToTarget(*InSpecHandle.Data, TargetASC);
+
+	return ActiveGameplayEffectHandle.WasSuccessfullyApplied();
+}
