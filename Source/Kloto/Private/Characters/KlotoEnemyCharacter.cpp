@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "KlotoDebugHelper.h"
+#include "KlotoFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/UI/EnemyUIComponent.h"
@@ -98,7 +99,13 @@ UEnemyUIComponent* AKlotoEnemyCharacter::GetEnemyUIComponent() const
 void AKlotoEnemyCharacter::OnBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if (UKlotoFunctionLibrary::IsTargetPawnHostile(this, HitPawn))
+		{
+			EnemyCombatComponent->OnHitTargetActor(HitPawn);
+		}
+	}
 }
 
 void AKlotoEnemyCharacter::InitEnemyStartUpData()

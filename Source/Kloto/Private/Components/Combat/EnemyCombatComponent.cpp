@@ -7,8 +7,10 @@
 #include "KlotoDebugHelper.h"
 #include "KlotoFunctionLibrary.h"
 #include "KlotoGameplayTags.h"
+#include "Characters/KlotoEnemyCharacter.h"
+#include "Components/BoxComponent.h"
 
-void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
+	void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
 	if (OverlappedActors.Contains(HitActor)) return;
 
@@ -42,4 +44,32 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 			KlotoGameplayTags::Shared_Event_MeleeHit,
 			EventData);
 	}
+}
+
+void UEnemyCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+{
+	AKlotoEnemyCharacter* KlotoEnemyCharacter = Cast<AKlotoEnemyCharacter>(GetOwningPawn());
+
+	check(KlotoEnemyCharacter);
+	UBoxComponent* LeftHandCollisionBox = KlotoEnemyCharacter->GetLeftHandCollisionBox();
+	UBoxComponent* RightHandCollisionBox = KlotoEnemyCharacter->GetRightHandCollisionBox();
+
+	switch (ToggleDamageType)
+	{
+	case EToggleDamageType::LeftHand:
+			LeftHandCollisionBox->SetCollisionEnabled(bShouldEnable? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+			break;
+		case EToggleDamageType::RightHand:
+			RightHandCollisionBox->SetCollisionEnabled(bShouldEnable? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+			break;
+		default:
+			break;
+	}
+
+	if (!bShouldEnable)
+	{
+		OverlappedActors.Empty();
+	}
+
+		
 }
