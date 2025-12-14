@@ -36,6 +36,11 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FWaitSpawnEnemiesDelegate DidNotSpawn;
 
+//~ Begin UGameplayTask Interface
+	virtual void Activate() override;
+	virtual void OnDestroy(bool bInOwnerFinished) override;
+//~ End UGameplayTask Interface
+
 private:
 	FGameplayTag CachedEventTag;
 	TSoftObjectPtr<AKlotoEnemyCharacter> CachedSoftEnemyClassToSpawn;
@@ -43,4 +48,7 @@ private:
 	float CachedRandomSpawnRadius;
 	FVector CachedSpawnLocation;
 	FRotator CachedSpawnRotation;
+	FDelegateHandle DelegateHandle;
+
+	void OnGameplayEventReceived(const FGameplayEventData* InPayLoad);
 };
