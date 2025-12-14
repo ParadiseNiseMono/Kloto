@@ -10,8 +10,11 @@
 #include "Characters/KlotoEnemyCharacter.h"
 #include "Components/BoxComponent.h"
 
-	void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
+void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
+	//TODO: Handle perfect dodging
+	if (UKlotoFunctionLibrary::NativeDoesActorHasTag(HitActor, KlotoGameplayTags::Player_Status_Rolling)) return;
+		
 	if (OverlappedActors.Contains(HitActor)) return;
 
 	OverlappedActors.AddUnique(HitActor);
