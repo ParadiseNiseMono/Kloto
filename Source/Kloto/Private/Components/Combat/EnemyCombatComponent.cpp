@@ -13,7 +13,6 @@
 void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
 	//TODO: Handle perfect dodging
-	if (UKlotoFunctionLibrary::NativeDoesActorHasTag(HitActor, KlotoGameplayTags::Player_Status_Rolling)) return;
 		
 	if (OverlappedActors.Contains(HitActor)) return;
 

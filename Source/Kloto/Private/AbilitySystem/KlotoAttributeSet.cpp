@@ -46,6 +46,20 @@ void UKlotoAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 
 		SetCurrentRage(NewRage);
 
+		if (GetCurrentRage() == GetMaxRage())
+		{
+			UKlotoFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), KlotoGameplayTags::Player_Status_Rage_Full);
+		}
+		else if (GetCurrentRage() == 0.f)
+		{
+			UKlotoFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), KlotoGameplayTags::Player_Status_Rage_None);
+		}
+		else
+		{
+			UKlotoFunctionLibrary::RemoveGameplayTagFromActorIfFound(Data.Target.GetAvatarActor(), KlotoGameplayTags::Player_Status_Rage_Full);
+			UKlotoFunctionLibrary::RemoveGameplayTagFromActorIfFound(Data.Target.GetAvatarActor(), KlotoGameplayTags::Player_Status_Rage_None);
+		}
+
 		if (URobotUIComponent* RobotUIComponent = CachedPawnUIInterface->GetRobotUIComponent())
 		{
 			RobotUIComponent->OnCurrentRageChanged.Broadcast(GetCurrentRage() / GetMaxRage());
