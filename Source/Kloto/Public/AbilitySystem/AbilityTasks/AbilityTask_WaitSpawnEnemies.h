@@ -27,8 +27,7 @@ public:
 		TSoftClassPtr<AKlotoEnemyCharacter> SoftEnemyClassToSpawn,
 		int32 NumToSpawn,
 		const FVector& SpawnLocation,
-		float RandomSpawnRadius,
-		const FRotator& SpawnRotation);
+		float RandomSpawnRadius);
 
 	UPROPERTY(BlueprintAssignable)
 	FWaitSpawnEnemiesDelegate OnSpawnFinished;
@@ -47,7 +46,6 @@ private:
 	int32 CachedNumToSpawn;
 	float CachedRandomSpawnRadius;
 	FVector CachedSpawnLocation;
-	FRotator CachedSpawnRotation;
 	FDelegateHandle DelegateHandle;
 
 	void OnGameplayEventReceived(const FGameplayEventData* InPayLoad);
