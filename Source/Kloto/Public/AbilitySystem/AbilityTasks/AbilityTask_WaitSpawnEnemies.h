@@ -24,7 +24,7 @@ public:
 	static UAbilityTask_WaitSpawnEnemies* WaitSpawnEnemies(
 		UGameplayAbility* OwingAbility,
 		FGameplayTag EventTag,
-		TSoftObjectPtr<AKlotoEnemyCharacter> SoftEnemyClassToSpawn,
+		TSoftClassPtr<AKlotoEnemyCharacter> SoftEnemyClassToSpawn,
 		int32 NumToSpawn,
 		const FVector& SpawnLocation,
 		float RandomSpawnRadius,
@@ -43,7 +43,7 @@ public:
 
 private:
 	FGameplayTag CachedEventTag;
-	TSoftObjectPtr<AKlotoEnemyCharacter> CachedSoftEnemyClassToSpawn;
+	TSoftClassPtr<AKlotoEnemyCharacter> CachedSoftEnemyClassToSpawn;
 	int32 CachedNumToSpawn;
 	float CachedRandomSpawnRadius;
 	FVector CachedSpawnLocation;
@@ -51,4 +51,5 @@ private:
 	FDelegateHandle DelegateHandle;
 
 	void OnGameplayEventReceived(const FGameplayEventData* InPayLoad);
+	void OnEnemyClassLoaded();
 };

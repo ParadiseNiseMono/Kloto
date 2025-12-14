@@ -5,9 +5,12 @@
 
 #include "AbilitySystemComponent.h"
 #include "KlotoDebugHelper.h"
+#include "NavigationSystem.h"
+#include "Characters/KlotoEnemyCharacter.h"
+#include "Engine/AssetManager.h"
 
 UAbilityTask_WaitSpawnEnemies* UAbilityTask_WaitSpawnEnemies::WaitSpawnEnemies(UGameplayAbility* OwingAbility,
-                                                                               FGameplayTag EventTag, TSoftObjectPtr<AKlotoEnemyCharacter> SoftEnemyClassToSpawn, int32 NumToSpawn,
+                                                                               FGameplayTag EventTag, TSoftClassPtr<AKlotoEnemyCharacter> SoftEnemyClassToSpawn, int32 NumToSpawn,
                                                                                const FVector& SpawnLocation, float RandomSpawnRadius, const FRotator& SpawnRotation)
 {
 	UAbilityTask_WaitSpawnEnemies* Node = NewAbilityTask<UAbilityTask_WaitSpawnEnemies>(OwingAbility);
@@ -39,7 +42,65 @@ void UAbilityTask_WaitSpawnEnemies::OnDestroy(bool bInOwnerFinished)
 
 void UAbilityTask_WaitSpawnEnemies::OnGameplayEventReceived(const FGameplayEventData* InPayLoad)
 {
-	Debug::Print(TEXT("GameplayEventReceived!"));
+	if (ensure(!CachedSoftEnemyClassToSpawn.IsNull()))
+	{
+		UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
+		CachedSoftEnemyClassToSpawn.ToSoftObjectPath(),
+		FStreamableDelegate::CreateUObject(this, &ThisClass::OnEnemyClassLoaded)
+		);
+	}
+	else
+	{
+		if (ShouldBroadcastAbilityTaskDelegates())
+		{
+			DidNotSpawn.Broadcast(TArray<AKlotoEnemyCharacter*>());
+		}
+		EndTask();
+	}
+}
+
+void UAbilityTask_WaitSpawnEnemies::OnEnemyClassLoaded()
+{
+	UClass* LoadedClass = CachedSoftEnemyClassToSpawn.Get();
+	UWorld* World = GetWorld();
+
+	if (!LoadedClass || !World)
+	{
+		if (ShouldBroadcastAbilityTaskDelegates())
+		{
+			DidNotSpawn.Broadcast(TArray<AKlotoEnemyCharacter*>());
+		}
+		EndTask();
+		return;
+	}
+	TArray<AKlotoEnemyCharacter*> SpawnedEnemies;
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	
+	for (int32 i = 0; i < CachedNumToSpawn; i++)
+	{
+		FVector RandomSpawnLocation;
+		UNavigationSystemV1::K2_GetRandomReachablePointInRadius(this, CachedSpawnLocation, RandomSpawnLocation, CachedRandomSpawnRadius);
+
+		RandomSpawnLocation += FVector(0.f, 0.f, 150.f);
+
+		AKlotoEnemyCharacter* SpawnedEnemy = World->SpawnActor<AKlotoEnemyCharacter>(LoadedClass, RandomSpawnLocation, CachedSpawnRotation, SpawnParams);
+
+		SpawnedEnemies.Add(SpawnedEnemy);
+	}
+
+	if (ShouldBroadcastAbilityTaskDelegates())
+	{
+		if (!SpawnedEnemies.IsEmpty())
+		{
+			OnSpawnFinished.Broadcast(SpawnedEnemies);
+		}
+		else
+		{
+			DidNotSpawn.Broadcast(TArray<AKlotoEnemyCharacter*>());
+		}
+	}
 
 	EndTask();
 }
