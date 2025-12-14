@@ -21,6 +21,7 @@ namespace KlotoGameplayTags
 
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_Toggleable);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_Toggleable_TargetLock);
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_Toggleable_Rage);
 	
 	/*Player Tags*/
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_Equip_Axe);
@@ -31,6 +32,7 @@ namespace KlotoGameplayTags
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_Roll);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_Block);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_TargetLock);
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_Rage);
 	
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Weapon_Axe);
 
@@ -45,6 +47,10 @@ namespace KlotoGameplayTags
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_Rolling);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_Blocking);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_TargetLock);
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_Rage_Activating);
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_Rage_Active);
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_Rage_Full);
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Status_Rage_None);
 
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_SetByCaller_AttackType_Light);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_SetByCaller_AttackType_Heavy);
