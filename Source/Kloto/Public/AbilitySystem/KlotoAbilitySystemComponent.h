@@ -20,7 +20,7 @@ public:
 	void OnAbilityInputReleased(const FGameplayTag& InInputTag);
 
 	UFUNCTION(BlueprintCallable, Category = "Kloto|Ability", meta = (ApplyLevel = "1"))
-	void GrantRobotWeaponAbilities(const TArray<FKlotoRobotAbilitySet>& InDefaultWeaponAbilities, int32 InApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles);
+	void GrantRobotWeaponAbilities(const TArray<FKlotoRobotAbilitySet>& InDefaultWeaponAbilities,const TArray<FKlotoRobotSpecialAbilitySet>& InSpecialWeaponAbilities, int32 InApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles);
 
 	UFUNCTION(BlueprintCallable, Category = "Kloto|Ability")
 	void RemoveGrantedRobotWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& InSpecHandleToRemove);

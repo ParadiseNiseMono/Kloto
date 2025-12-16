@@ -39,11 +39,24 @@ void UKlotoAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& In
 }
 
 void UKlotoAbilitySystemComponent::GrantRobotWeaponAbilities(const TArray<FKlotoRobotAbilitySet>& InDefaultWeaponAbilities,
+	const TArray<FKlotoRobotSpecialAbilitySet>& InSpecialWeaponAbilities,
 	int32 InApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilitySpecHandles)
 {
 	if (InDefaultWeaponAbilities.IsEmpty()) return;
 
 	for (const FKlotoRobotAbilitySet& AbilitySet : InDefaultWeaponAbilities)
+	{
+		if (!AbilitySet.IsValid()) continue;
+
+		FGameplayAbilitySpec AbilitySpec(AbilitySet.AbilityToGrant);
+		AbilitySpec.SourceObject = GetAvatarActor();
+		AbilitySpec.Level = InApplyLevel;
+		AbilitySpec.GetDynamicSpecSourceTags().AddTag(AbilitySet.InputTag);
+		
+		OutGrantedAbilitySpecHandles.AddUnique(GiveAbility(AbilitySpec));
+	}
+
+	for (const FKlotoRobotSpecialAbilitySet& AbilitySet : InSpecialWeaponAbilities)
 	{
 		if (!AbilitySet.IsValid()) continue;
 

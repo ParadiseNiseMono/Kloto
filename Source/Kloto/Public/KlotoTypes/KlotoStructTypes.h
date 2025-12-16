@@ -26,6 +26,18 @@ struct FKlotoRobotAbilitySet
 };
 
 USTRUCT(BlueprintType)
+struct FKlotoRobotSpecialAbilitySet : public FKlotoRobotAbilitySet
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSoftObjectPtr<UMaterialInterface> AbilityIconMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "Player.Cooldown"))
+	FGameplayTag AbilityCooldownTag;
+};
+
+USTRUCT(BlueprintType)
 struct FKlotoRobotWeaponData
 {
 	GENERATED_BODY()
@@ -38,6 +50,9 @@ struct FKlotoRobotWeaponData
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "InputTag"))
 	TArray<FKlotoRobotAbilitySet> DefaultWeaponAbilities;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (Categories = "Player.Cooldown"))
+	TArray<FKlotoRobotSpecialAbilitySet> SpecialWeaponAbilities;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FScalableFloat WeaponBaseDamage;
