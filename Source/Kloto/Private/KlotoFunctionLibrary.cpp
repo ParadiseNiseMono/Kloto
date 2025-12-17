@@ -162,7 +162,7 @@ void UKlotoFunctionLibrary::CountDown(const UObject* WorldContextObject, float T
 
 	if(GEngine)
 	{
-		World = GEngine->GetWorldFromContextObject(World, EGetWorldErrorMode::LogAndReturnNull);
+		World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
 	}
 	if (!World) return;
 
