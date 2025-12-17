@@ -5,6 +5,8 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "KlotoFunctionLibrary.h"
+#include "KlotoGameplayTags.h"
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "Components/Combat/PawnCombatComponent.h"
 
@@ -64,4 +66,33 @@ FActiveGameplayEffectHandle UKlotoGameplayAbility::BP_ApplyGameplayEffectSpecHan
 	OutSuccessType = ActiveGameplayEffectHandle.WasSuccessfullyApplied() ? EKlotoSuccessType::Successful : EKlotoSuccessType::Failed;
 
 	return ActiveGameplayEffectHandle;
+}
+
+void UKlotoGameplayAbility::ApplyEffectSpecHandleToHitResults(const FGameplayEffectSpecHandle& InSpecHandle,
+	const TArray<FHitResult>& InHitResults)
+{
+	if (InHitResults.IsEmpty()) return;
+
+	APawn* OwingPawn = CastChecked<APawn>(GetAvatarActorFromActorInfo());
+	for (const FHitResult& HitResult : InHitResults)
+	{
+		if (APawn* HitPawn = Cast<APawn>(HitResult.GetActor()))
+		{
+			if (UKlotoFunctionLibrary::IsTargetPawnHostile(OwingPawn, HitPawn))
+			{
+				FActiveGameplayEffectHandle EffectHandle = NativeApplyGameplayEffectSpecHandleToTarget(HitPawn, InSpecHandle);
+				if (EffectHandle.WasSuccessfullyApplied())
+				{
+					FGameplayEventData Data;
+					Data.Instigator = OwingPawn;
+					Data.Target = HitPawn;
+					UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+						HitPawn,
+						KlotoGameplayTags::Shared_Event_HitReact,
+						Data
+						);
+				}
+			}
+		}
+	}
 }

@@ -44,4 +44,7 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Kloto|Ability", meta = (DisplayName = "Apply Gameplay Effect Spec Handle To Target", ExpandEnumAsExecs = "OutSuccessType"))
 	FActiveGameplayEffectHandle BP_ApplyGameplayEffectSpecHandleToTarget(AActor* TargetActor, const FGameplayEffectSpecHandle& InSpecHandle, EKlotoSuccessType& OutSuccessType);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|Ability")
+	void ApplyEffectSpecHandleToHitResults(const FGameplayEffectSpecHandle& InSpecHandle, const TArray<FHitResult>& InHitResults);
 };
