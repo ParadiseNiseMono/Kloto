@@ -30,6 +30,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
 	FGameplayEffectSpecHandle MakeRobotDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass,
 		float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag, int32 InUsedComboCount);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|Ability")
+	bool GetAbilityRemainingCooldownByTag(FGameplayTag InCooldownTag, float& TotalCooldownTime, float& RemainingCooldownTime);
 private:
 	TWeakObjectPtr<AKlotoRobotCharacter> CachedKlotoRobotCharacter;
 	TWeakObjectPtr<AKlotoRobotController> CachedKlotoRobotController;
