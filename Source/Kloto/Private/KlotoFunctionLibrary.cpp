@@ -152,3 +152,9 @@ bool UKlotoFunctionLibrary::ApplyGameplayEffectSpecHandleToTargetActor(AActor* I
 
 	return ActiveGameplayEffectHandle.WasSuccessfullyApplied();
 }
+
+void UKlotoFunctionLibrary::CountDown(const UObject* WorldContextObject, float TotalTime, float UpdateInterval,
+	float& OutRemainTime, EKlotoCountDownActionInput CountDownActionInput,
+	UPARAM(DisplayName = "Output") EKlotoCountDownActionOutput& CountDownActionOutput, FLatentActionInfo LatentInfo)
+{
+}

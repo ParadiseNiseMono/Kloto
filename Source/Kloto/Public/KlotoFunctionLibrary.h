@@ -54,4 +54,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLibary")
 	static bool ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor, const FGameplayEffectSpecHandle& InSpecHandle);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLibary", meta=(Latent, WorldContext = "WorldContextObject", LatentInfo = "LatentInfo", ExpandEnumAsExecs = "CountDownActionInput|CountDownActionOutput", TotalTime = "1", UpdateInterval = "0.1"))
+	static void CountDown(const UObject* WorldContextObject, float TotalTime, float UpdateInterval, float& OutRemainTime,
+		EKlotoCountDownActionInput CountDownActionInput,
+		UPARAM(DisplayName = "Output") EKlotoCountDownActionOutput& CountDownActionOutput,
+		FLatentActionInfo LatentInfo);
 };

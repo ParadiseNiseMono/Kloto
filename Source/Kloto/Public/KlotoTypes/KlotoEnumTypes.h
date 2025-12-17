@@ -20,3 +20,18 @@ enum class EKlotoSuccessType : uint8
 	Successful,
 	Failed
 };
+
+UENUM()
+enum class EKlotoCountDownActionInput : uint8
+{
+	Start,
+	Cancel
+};
+
+UENUM()
+enum class EKlotoCountDownActionOutput : uint8
+{
+	Updated,
+	Completed,
+	Canceled
+};
