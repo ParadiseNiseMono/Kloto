@@ -11,13 +11,13 @@
 class FKlotoCountDownAction : public FPendingLatentAction
 {
 public:
-	FKlotoCountDownAction(float InTotalCountTime,
+	FKlotoCountDownAction(float InTotalCountDownTime,
 		float InUpdateInterval,
 		float& InOutRemainingTime,
 		EKlotoCountDownActionOutput& InCountDownActionOutput,
 		const FLatentActionInfo& InLatentInfo)
 	: bNeedToCancel(false),
-	TotalCountDownTime(InTotalCountTime),
+	TotalCountDownTime(InTotalCountDownTime),
 	UpdateInterval(InUpdateInterval),
 	OutRemainTime(InOutRemainingTime),
 	CountDownActionOutput(InCountDownActionOutput),
@@ -29,7 +29,8 @@ public:
 	{
 		
 	}
-
+	void CancelAction();
+	
 private:
 	bool bNeedToCancel;
 	float TotalCountDownTime;

@@ -10,6 +10,7 @@
 #include "KlotoGameplayTags.h"
 #include "Interfaces/PawnCombatInterface.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "KlotoTypes/KlotoCountDownAction.h"
 
 
 UKlotoAbilitySystemComponent* UKlotoFunctionLibrary::NativeGetKlotoAscFromActor(AActor* InActor)
@@ -157,4 +158,32 @@ void UKlotoFunctionLibrary::CountDown(const UObject* WorldContextObject, float T
 	float& OutRemainTime, EKlotoCountDownActionInput CountDownActionInput,
 	UPARAM(DisplayName = "Output") EKlotoCountDownActionOutput& CountDownActionOutput, FLatentActionInfo LatentInfo)
 {
+	UWorld* World = nullptr;
+
+	if(GEngine)
+	{
+		World = GEngine->GetWorldFromContextObject(World, EGetWorldErrorMode::LogAndReturnNull);
+	}
+	if (!World) return;
+
+	FLatentActionManager& LatentActionManager = World->GetLatentActionManager();
+	FKlotoCountDownAction* FoundAction = LatentActionManager.FindExistingAction<FKlotoCountDownAction>(LatentInfo.CallbackTarget, LatentInfo.UUID);
+
+	if (CountDownActionInput == EKlotoCountDownActionInput::Start)
+	{
+		if (!FoundAction)
+		{
+			LatentActionManager.AddNewAction(
+			 LatentInfo.CallbackTarget,
+				LatentInfo.UUID,
+				new FKlotoCountDownAction(TotalTime, UpdateInterval, OutRemainTime, CountDownActionOutput, LatentInfo));
+		}
+	}
+	if (CountDownActionInput == EKlotoCountDownActionInput::Cancel)
+	{
+		if (FoundAction)
+		{
+			FoundAction->CancelAction();
+		}
+	}
 }

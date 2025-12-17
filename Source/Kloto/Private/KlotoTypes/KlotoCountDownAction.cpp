@@ -2,3 +2,8 @@
 
 
 #include "KlotoTypes/KlotoCountDownAction.h"
+
+void FKlotoCountDownAction::CancelAction()
+{
+	bNeedToCancel = true;
+}
