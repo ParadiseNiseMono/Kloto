@@ -4,6 +4,7 @@
 #include "DataAssets/StartUpData/DataAsset_RobotStartUpData.h"
 #include "AbilitySystem/KlotoAbilitySystemComponent.h"
 #include "AbilitySystem/Abilities/KlotoGameplayAbility.h"
+#include "AbilitySystem/Abilities/KlotoRobotGameplayAbility.h"
 
 void UDataAsset_RobotStartUpData::GiveToAbilitySystemComponent(UKlotoAbilitySystemComponent* InAscToGive,
 	int32 ApplyLevel)

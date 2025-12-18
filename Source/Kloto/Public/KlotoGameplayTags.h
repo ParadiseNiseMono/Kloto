@@ -37,6 +37,7 @@ namespace KlotoGameplayTags
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_Rage);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_SpecialWeaponAbility_Light);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_SpecialWeaponAbility_Heavy);
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_PickUp_Stones);
 
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Cooldown_SpecialWeaponAbility_Light);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Cooldown_SpecialWeaponAbility_Heavy);
