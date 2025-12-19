@@ -3,9 +3,13 @@
 
 #include "AbilitySystem/Abilities/RobotGA_PickUpStones.h"
 
+#include "Characters/KlotoRobotCharacter.h"
+#include "Items/PickUps/KlotoStoneBase.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 void URobotGA_PickUpStones::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-	const FGameplayEventData* TriggerEventData)
+                                            const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+                                            const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
@@ -15,4 +19,37 @@ void URobotGA_PickUpStones::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+void URobotGA_PickUpStones::CollectStones()
+{
+	CollectedStones.Empty();
+	TArray<FHitResult> OutHits;
+	
+	UKismetSystemLibrary::BoxTraceMultiForObjects(
+		GetRobotCharacterFromActorInfo(),
+		GetRobotCharacterFromActorInfo()->GetActorLocation(),
+		GetRobotCharacterFromActorInfo()->GetActorLocation() + -GetRobotCharacterFromActorInfo()->GetActorUpVector() * BoxTraceDistance,
+		TraceBoxSize / 2.f,
+		(-GetRobotCharacterFromActorInfo()->GetActorUpVector()).ToOrientationRotator(),
+		BoxTraceTypes,
+		false,
+		TArray<AActor*>(),
+		bDrawDebugShape ? EDrawDebugTrace::ForOneFrame : EDrawDebugTrace::None,
+		OutHits,
+		true
+		);
+
+	for (FHitResult HitResult : OutHits)
+	{
+		if (AKlotoStoneBase* FoundStone = Cast<AKlotoStoneBase>(HitResult.GetActor()))
+		{
+			CollectedStones.AddUnique(FoundStone);
+		}
+	}
+
+	if (CollectedStones.IsEmpty())
+	{
+		CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
+	}
 }
