@@ -73,9 +73,9 @@ void UKlotoAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 		const float NewCurrentHealth = FMath::Clamp(OldHealth - Damage, 0.f, GetMaxHealth());
 		SetCurrentHealth(NewCurrentHealth);
 
-		const FString DebugString = FString::Printf(TEXT("OldHealth: %f, Damage: %f, NewCurrentHealth: %f"), OldHealth, Damage, NewCurrentHealth);
+		//const FString DebugString = FString::Printf(TEXT("OldHealth: %f, Damage: %f, NewCurrentHealth: %f"), OldHealth, Damage, NewCurrentHealth);
 		
-		Debug::Print(DebugString);
+		//Debug::Print(DebugString);
 
 		PawnUIComponent->OnCurrentHealthChanged.Broadcast(GetCurrentHealth() / GetMaxHealth());
 		
