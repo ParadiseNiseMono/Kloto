@@ -53,3 +53,17 @@ void URobotGA_PickUpStones::CollectStones()
 		CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
 	}
 }
+
+void URobotGA_PickUpStones::ConsumeStones()
+{
+	if (CollectedStones.IsEmpty())
+	{
+		CancelAbility(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(), true);
+		return;
+	}
+
+	for (AKlotoStoneBase* StoneToConsume : CollectedStones)
+	{
+		StoneToConsume->Consume(GetKlotoAbilitySystemComponentFromActorInfo(), GetAbilityLevel());
+	}
+}
