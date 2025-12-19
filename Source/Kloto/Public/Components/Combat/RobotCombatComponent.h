@@ -6,6 +6,7 @@
 #include "Components/Combat/PawnCombatComponent.h"
 #include "RobotCombatComponent.generated.h"
 
+class URobotUIComponent;
 class AKlotoRobotWeapon;
 /**
  * 

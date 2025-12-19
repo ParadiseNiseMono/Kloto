@@ -33,6 +33,11 @@ URobotCombatComponent* UKlotoRobotGameplayAbility::GetRobotCombatComponentFromAc
 	return GetRobotCharacterFromActorInfo()->GetRobotCombatComponent();
 }
 
+URobotUIComponent* UKlotoRobotGameplayAbility::GetRobotUIComponentFromActorInfo()
+{
+	return GetRobotCharacterFromActorInfo()->GetRobotUIComponent();
+}
+
 FGameplayEffectSpecHandle UKlotoRobotGameplayAbility::MakeRobotDamageEffectSpecHandle(
 	TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag,
 	int32 InUsedComboCount)

@@ -6,6 +6,7 @@
 #include "AbilitySystem/Abilities/KlotoGameplayAbility.h"
 #include "KlotoRobotGameplayAbility.generated.h"
 
+class URobotUIComponent;
 class URobotCombatComponent;
 class AKlotoRobotController;
 class AKlotoRobotCharacter;
@@ -26,6 +27,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
 	URobotCombatComponent* GetRobotCombatComponentFromActorInfo();
+
+	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
+	URobotUIComponent* GetRobotUIComponentFromActorInfo();
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|Ability")
 	FGameplayEffectSpecHandle MakeRobotDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass,
