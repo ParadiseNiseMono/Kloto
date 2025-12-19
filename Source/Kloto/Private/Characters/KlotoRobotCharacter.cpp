@@ -79,6 +79,8 @@ void AKlotoRobotCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
 	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Triggered, this, &ThisClass::Input_SwitchTargetTriggered);
 	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Completed, this, &ThisClass::Input_SwitchTargetCompleted);
+
+	KlotoInputComponent->BindNativeInputAction(InputConfigDataAsset, KlotoGameplayTags::InputTag_PickUp_Stones, ETriggerEvent::Started, this, &ThisClass::Input_PickUpStonesStarted);
 	
 	KlotoInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
@@ -144,6 +146,17 @@ void AKlotoRobotCharacter::Input_SwitchTargetCompleted(const FInputActionValue& 
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
 		this,
 		SwitchDirection.X > 0.f ? KlotoGameplayTags::Player_Event_SwitchTarget_Right : KlotoGameplayTags::Player_Event_SwitchTarget_Left,
+		Data
+		);
+}
+
+void AKlotoRobotCharacter::Input_PickUpStonesStarted(const FInputActionValue& InputActionValue)
+{
+	FGameplayEventData Data;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this,
+		KlotoGameplayTags::Player_Event_ConsumeStones,
 		Data
 		);
 }
