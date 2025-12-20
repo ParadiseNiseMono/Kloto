@@ -4,8 +4,12 @@
 #include "GameModes/KlotoSurvivalGameMode.h"
 
 #include "KlotoDebugHelper.h"
+#include "NavigationSystem.h"
 #include "Characters/KlotoEnemyCharacter.h"
 #include "Engine/AssetManager.h"
+#include "Engine/TargetPoint.h"
+#include "Kismet/GameplayStatics.h"
+#include "NavigationSystem.h"
 
 void AKlotoSurvivalGameMode::BeginPlay()
 {
@@ -38,7 +42,7 @@ void AKlotoSurvivalGameMode::Tick(float DeltaTime)
 		TimePassSinceStart += DeltaTime;
 		if (TimePassSinceStart >= SpawnNewWaveWaitTime)
 		{
-			//Handle Spawn New Enemies
+			CurrentSpawnedEnemiesCounter += TrySpawnWaveEnemies();
 			TimePassSinceStart = 0.f;
 			SetCurrentSurvivalGameModeState(EKlotoSurvivalGameModeState::InProgress);
 		}
@@ -100,6 +104,57 @@ void AKlotoSurvivalGameMode::PreLoadNextWaveEnemies()
 	}
 }
 
+int32 AKlotoSurvivalGameMode::TrySpawnWaveEnemies()
+{
+	if (SpawnTargetPoints.IsEmpty())
+	{
+		UGameplayStatics::GetAllActorsOfClass(this, ATargetPoint::StaticClass(), SpawnTargetPoints);
+	}
+
+	checkf(!SpawnTargetPoints.IsEmpty(), TEXT("No valid target point to spawn enemies in %s Level"), *GetWorld()->GetName());
+
+	uint32 EnemiesSpawnedThisTime = 0;
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	for (const FKlotoEnemyWaveSpawnerInfo& SpawnerInfo : GetCurrentWaveSpawnerTableRow()->EnemyWaveSpawnerInfos)
+	{
+		if (SpawnerInfo.SoftEnemyClassToSpawn.IsNull()) continue;
+
+		const int32 NumToSpawn = FMath::RandRange(SpawnerInfo.MinPerSpawnCount, SpawnerInfo.MaxPerSpawnCount);
+
+		UClass* LoadedClass = PreLoadedEnemyClassMap.FindChecked(SpawnerInfo.SoftEnemyClassToSpawn);
+
+		for (int i = 0; i < NumToSpawn; ++i)
+		{
+			const int32 RandomTargetPointToSpawn = FMath::RandRange(0, SpawnTargetPoints.Num() - 1);
+			const FVector SpawnLocation = SpawnTargetPoints[RandomTargetPointToSpawn]->GetActorLocation();
+			const FRotator SpawnRotation = SpawnTargetPoints[RandomTargetPointToSpawn]->GetActorForwardVector().ToOrientationRotator();
+
+			FVector RandomSpawnLocation;
+			UNavigationSystemV1::K2_GetRandomLocationInNavigableRadius(GetWorld(), SpawnLocation, RandomSpawnLocation, 500.f);
+
+			RandomSpawnLocation += FVector(0.f, 0.f, 150.f);
+
+			AKlotoEnemyCharacter* SpawnedEnemy = GetWorld()->SpawnActor<AKlotoEnemyCharacter>(LoadedClass, RandomSpawnLocation, SpawnRotation, SpawnParameters);
+
+			if (SpawnedEnemy)
+			{
+				EnemiesSpawnedThisTime++;
+				TotalSpawnedEnemiesThisWaveCounter++;
+			}
+
+			if (!ShouldKeepSpawnEnemies()) return EnemiesSpawnedThisTime;
+		}
+	}
+	return EnemiesSpawnedThisTime;
+}
+
+bool AKlotoSurvivalGameMode::ShouldKeepSpawnEnemies() const
+{
+	return TotalSpawnedEnemiesThisWaveCounter <= GetCurrentWaveSpawnerTableRow()->TotalEnemyToSpawnThisWave;
+}
+
 FKlotoEnemyWaveSpawnTableRow* AKlotoSurvivalGameMode::GetCurrentWaveSpawnerTableRow() const
 {
 	const FName RowName = FName(TEXT("Wave") + FString::FromInt(CurrentWaveCount));
@@ -108,5 +163,6 @@ FKlotoEnemyWaveSpawnTableRow* AKlotoSurvivalGameMode::GetCurrentWaveSpawnerTable
 
 	checkf(FoundRow, TEXT("Could not find data table row"));
 
+	
 	return FoundRow;
 }

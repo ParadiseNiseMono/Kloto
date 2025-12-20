@@ -6,6 +6,7 @@
 #include "GameModes/KlotoBaseGameMode.h"
 #include "KlotoSurvivalGameMode.generated.h"
 
+class ATargetPoint;
 class AKlotoEnemyCharacter;
 
 UENUM(BlueprintType)
@@ -64,6 +65,9 @@ private:
 	void SetCurrentSurvivalGameModeState(EKlotoSurvivalGameModeState InState);
 	bool HasFinishedAllWaves() const;
 	void PreLoadNextWaveEnemies();
+	int32 TrySpawnWaveEnemies();
+	bool ShouldKeepSpawnEnemies() const;
+	
 	FKlotoEnemyWaveSpawnTableRow* GetCurrentWaveSpawnerTableRow() const;
 	
 	UPROPERTY()
@@ -83,6 +87,15 @@ private:
 
 	UPROPERTY()
 	float TimePassSinceStart = 0.f;
+
+	UPROPERTY()
+	int32 CurrentSpawnedEnemiesCounter = 0;
+
+	UPROPERTY()
+	TArray<AActor*> SpawnTargetPoints;
+
+	UPROPERTY()
+	int32 TotalSpawnedEnemiesThisWaveCounter = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float SpawnNewWaveWaitTime = 5.f;
