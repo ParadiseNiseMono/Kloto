@@ -161,8 +161,7 @@ bool AKlotoSurvivalGameMode::ShouldKeepSpawnEnemies() const
 void AKlotoSurvivalGameMode::OnEnemyDestroyed(AActor* DestroyedActor)
 {
 	CurrentSpawnedEnemiesCounter--;
-
-	Debug::Print(TEXT("CurrentSpawnedEnemiesCounter: %i TotalSpawnedEnemiesThisWaveCounter: %i"),CurrentSpawnedEnemiesCounter, TotalSpawnedEnemiesThisWaveCounter);
+	
 	if (ShouldKeepSpawnEnemies())
 	{
 		CurrentSpawnedEnemiesCounter += TrySpawnWaveEnemies();
