@@ -187,3 +187,15 @@ FKlotoEnemyWaveSpawnTableRow* AKlotoSurvivalGameMode::GetCurrentWaveSpawnerTable
 	
 	return FoundRow;
 }
+
+void AKlotoSurvivalGameMode::RegisterSpawnedEnemies(const TArray<AKlotoEnemyCharacter*>& InEnemiesToRegister)
+{
+	for (AKlotoEnemyCharacter* SpawnedEnemy : InEnemiesToRegister)
+	{
+		if (SpawnedEnemy)
+		{
+			CurrentSpawnedEnemiesCounter++;
+			SpawnedEnemy->OnDestroyed.AddUniqueDynamic(this, &ThisClass::OnEnemyDestroyed);
+		}
+	}
+}
