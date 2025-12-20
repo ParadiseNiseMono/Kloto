@@ -13,5 +13,8 @@ UCLASS()
 class KLOTO_API AKlotoBaseGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+
+public:
+	AKlotoBaseGameMode();
 };

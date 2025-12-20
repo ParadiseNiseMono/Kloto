@@ -3,3 +3,8 @@
 
 #include "GameModes/KlotoBaseGameMode.h"
 
+AKlotoBaseGameMode::AKlotoBaseGameMode()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+}
