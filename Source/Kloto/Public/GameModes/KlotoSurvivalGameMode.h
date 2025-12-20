@@ -67,6 +67,7 @@ private:
 	void PreLoadNextWaveEnemies();
 	int32 TrySpawnWaveEnemies();
 	bool ShouldKeepSpawnEnemies() const;
+	
 	UFUNCTION()
 	void OnEnemyDestroyed(AActor* DestroyedActor);
 	

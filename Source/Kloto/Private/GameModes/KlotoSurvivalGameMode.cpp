@@ -112,7 +112,7 @@ int32 AKlotoSurvivalGameMode::TrySpawnWaveEnemies()
 		UGameplayStatics::GetAllActorsOfClass(this, ATargetPoint::StaticClass(), SpawnTargetPoints);
 	}
 
-	checkf(!SpawnTargetPoints.IsEmpty(), TEXT("No valid target point to spawn enemies in %s Level"), *GetWorld()->GetName());
+	//checkf(!SpawnTargetPoints.IsEmpty(), TEXT("No valid target point to spawn enemies in %s Level"), *GetWorld()->GetName());
 
 	uint32 EnemiesSpawnedThisTime = 0;
 	FActorSpawnParameters SpawnParameters;
@@ -155,13 +155,14 @@ int32 AKlotoSurvivalGameMode::TrySpawnWaveEnemies()
 
 bool AKlotoSurvivalGameMode::ShouldKeepSpawnEnemies() const
 {
-	return TotalSpawnedEnemiesThisWaveCounter <= GetCurrentWaveSpawnerTableRow()->TotalEnemyToSpawnThisWave;
+	return TotalSpawnedEnemiesThisWaveCounter < GetCurrentWaveSpawnerTableRow()->TotalEnemyToSpawnThisWave;
 }
 
 void AKlotoSurvivalGameMode::OnEnemyDestroyed(AActor* DestroyedActor)
 {
 	CurrentSpawnedEnemiesCounter--;
 
+	Debug::Print(TEXT("CurrentSpawnedEnemiesCounter: %i TotalSpawnedEnemiesThisWaveCounter: %i"),CurrentSpawnedEnemiesCounter, TotalSpawnedEnemiesThisWaveCounter);
 	if (ShouldKeepSpawnEnemies())
 	{
 		CurrentSpawnedEnemiesCounter += TrySpawnWaveEnemies();
