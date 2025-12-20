@@ -3,6 +3,10 @@
 
 #include "GameModes/KlotoSurvivalGameMode.h"
 
+#include "KlotoDebugHelper.h"
+#include "Characters/KlotoEnemyCharacter.h"
+#include "Engine/AssetManager.h"
+
 void AKlotoSurvivalGameMode::BeginPlay()
 {
 	Super::BeginPlay();
@@ -12,6 +16,7 @@ void AKlotoSurvivalGameMode::BeginPlay()
 	SetCurrentSurvivalGameModeState(EKlotoSurvivalGameModeState::WaitSpawnNewWave);
 
 	TotalWavesToSpawn = EnemyWaveSpawnerDataTable->GetRowNames().Num();
+	PreLoadNextWaveEnemies();
 }
 
 void AKlotoSurvivalGameMode::Tick(float DeltaTime)
@@ -55,6 +60,7 @@ void AKlotoSurvivalGameMode::Tick(float DeltaTime)
 			else
 			{
 				SetCurrentSurvivalGameModeState(EKlotoSurvivalGameModeState::WaitSpawnNewWave);
+				PreLoadNextWaveEnemies();
 			}
 		}
 	}
@@ -70,4 +76,37 @@ void AKlotoSurvivalGameMode::SetCurrentSurvivalGameModeState(EKlotoSurvivalGameM
 bool AKlotoSurvivalGameMode::HasFinishedAllWaves() const
 {
 	return CurrentWaveCount > TotalWavesToSpawn;
+}
+
+void AKlotoSurvivalGameMode::PreLoadNextWaveEnemies()
+{
+	if (HasFinishedAllWaves()) return;
+
+	for (const FKlotoEnemyWaveSpawnerInfo& SpawnerInfo : GetCurrentWaveSpawnerTableRow()->EnemyWaveSpawnerInfos)
+	{
+		if (SpawnerInfo.SoftEnemyClassToSpawn.IsNull()) continue;
+
+		UAssetManager::GetStreamableManager().RequestAsyncLoad(SpawnerInfo.SoftEnemyClassToSpawn.ToSoftObjectPath(),
+			FStreamableDelegate::CreateLambda([SpawnerInfo,this]()
+			{
+				if (UClass* LoadedEnemyClass = SpawnerInfo.SoftEnemyClassToSpawn.Get())
+				{
+					PreLoadedEnemyClassMap.Emplace(SpawnerInfo.SoftEnemyClassToSpawn, LoadedEnemyClass);
+					Debug::Print(LoadedEnemyClass->GetName() + TEXT("Is Loaded"));
+				}
+			}
+			)
+			);
+	}
+}
+
+FKlotoEnemyWaveSpawnTableRow* AKlotoSurvivalGameMode::GetCurrentWaveSpawnerTableRow() const
+{
+	const FName RowName = FName(TEXT("Wave") + FString::FromInt(CurrentWaveCount));
+
+	FKlotoEnemyWaveSpawnTableRow* FoundRow = EnemyWaveSpawnerDataTable->FindRow<FKlotoEnemyWaveSpawnTableRow>(RowName, FString());
+
+	checkf(FoundRow, TEXT("Could not find data table row"));
+
+	return FoundRow;
 }

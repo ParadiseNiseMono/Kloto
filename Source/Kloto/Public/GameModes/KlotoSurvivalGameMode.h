@@ -63,6 +63,8 @@ protected:
 private:
 	void SetCurrentSurvivalGameModeState(EKlotoSurvivalGameModeState InState);
 	bool HasFinishedAllWaves() const;
+	void PreLoadNextWaveEnemies();
+	FKlotoEnemyWaveSpawnTableRow* GetCurrentWaveSpawnerTableRow() const;
 	
 	UPROPERTY()
 	EKlotoSurvivalGameModeState CurrentSurvivalGameModeState;
@@ -90,4 +92,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WaveDefinition", meta = (AllowPrivateAccess = "true"))
 	float WaveCompletedWaitTime = 5.f;
+
+	UPROPERTY()
+	TMap<TSoftClassPtr<AKlotoEnemyCharacter>, UClass*> PreLoadedEnemyClassMap;
 };
