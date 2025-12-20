@@ -40,7 +40,7 @@ void AKlotoSurvivalGameMode::Tick(float DeltaTime)
 	if (CurrentSurvivalGameModeState == EKlotoSurvivalGameModeState::SpawningNewWave)
 	{
 		TimePassSinceStart += DeltaTime;
-		if (TimePassSinceStart >= SpawnNewWaveWaitTime)
+		if (TimePassSinceStart >= SpawnEnemiesDelayTime)
 		{
 			CurrentSpawnedEnemiesCounter += TrySpawnWaveEnemies();
 			TimePassSinceStart = 0.f;
