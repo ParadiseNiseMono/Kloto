@@ -86,6 +86,8 @@ void AKlotoSurvivalGameMode::PreLoadNextWaveEnemies()
 {
 	if (HasFinishedAllWaves()) return;
 
+	PreLoadedEnemyClassMap.Empty();
+
 	for (const FKlotoEnemyWaveSpawnerInfo& SpawnerInfo : GetCurrentWaveSpawnerTableRow()->EnemyWaveSpawnerInfos)
 	{
 		if (SpawnerInfo.SoftEnemyClassToSpawn.IsNull()) continue;
@@ -96,7 +98,6 @@ void AKlotoSurvivalGameMode::PreLoadNextWaveEnemies()
 				if (UClass* LoadedEnemyClass = SpawnerInfo.SoftEnemyClassToSpawn.Get())
 				{
 					PreLoadedEnemyClassMap.Emplace(SpawnerInfo.SoftEnemyClassToSpawn, LoadedEnemyClass);
-					Debug::Print(LoadedEnemyClass->GetName() + TEXT("Is Loaded"));
 				}
 			}
 			)
@@ -140,6 +141,8 @@ int32 AKlotoSurvivalGameMode::TrySpawnWaveEnemies()
 
 			if (SpawnedEnemy)
 			{
+				SpawnedEnemy->OnDestroyed.AddUniqueDynamic(this, &ThisClass::OnEnemyDestroyed);
+				
 				EnemiesSpawnedThisTime++;
 				TotalSpawnedEnemiesThisWaveCounter++;
 			}
@@ -153,6 +156,23 @@ int32 AKlotoSurvivalGameMode::TrySpawnWaveEnemies()
 bool AKlotoSurvivalGameMode::ShouldKeepSpawnEnemies() const
 {
 	return TotalSpawnedEnemiesThisWaveCounter <= GetCurrentWaveSpawnerTableRow()->TotalEnemyToSpawnThisWave;
+}
+
+void AKlotoSurvivalGameMode::OnEnemyDestroyed(AActor* DestroyedActor)
+{
+	CurrentSpawnedEnemiesCounter--;
+
+	if (ShouldKeepSpawnEnemies())
+	{
+		CurrentSpawnedEnemiesCounter += TrySpawnWaveEnemies();
+	}
+	else if (CurrentSpawnedEnemiesCounter == 0)
+	{
+		TotalSpawnedEnemiesThisWaveCounter = 0;
+		CurrentSpawnedEnemiesCounter = 0;
+
+		SetCurrentSurvivalGameModeState(EKlotoSurvivalGameModeState::WaveCompleted);
+	}
 }
 
 FKlotoEnemyWaveSpawnTableRow* AKlotoSurvivalGameMode::GetCurrentWaveSpawnerTableRow() const
