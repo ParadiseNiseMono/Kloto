@@ -17,6 +17,7 @@
 #include "Components/UI/RobotUIComponent.h"
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
+#include "GameModes/KlotoSurvivalGameMode.h"
 
 AKlotoRobotCharacter::AKlotoRobotCharacter()
 {
@@ -54,7 +55,28 @@ void AKlotoRobotCharacter::PossessedBy(AController* NewController)
 	{
 		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous())
 		{
-			LoadedData->GiveToAbilitySystemComponent(KlotoAbilitySystemComponent);
+			int32 AbilityApplyLevel = 1;
+			if (AKlotoBaseGameMode* SurvivalGameMode = GetWorld()->GetAuthGameMode<AKlotoBaseGameMode>())
+			{
+				switch (SurvivalGameMode->GetCurrentGameDifficulty())
+				{
+					case EKlotoGameDifficulty::Easy:
+						AbilityApplyLevel = 4;
+						break;
+					case EKlotoGameDifficulty::Normal:
+						AbilityApplyLevel = 3;
+						break;
+					case EKlotoGameDifficulty::Hard:
+						AbilityApplyLevel = 2;
+						break;
+					case EKlotoGameDifficulty::VeryHard:
+						AbilityApplyLevel = 1;
+						break;
+					default:
+						break;
+				}
+			}
+			LoadedData->GiveToAbilitySystemComponent(KlotoAbilitySystemComponent, AbilityApplyLevel);
 		}
 	}
 }

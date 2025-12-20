@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "KlotoTypes/KlotoEnumTypes.h"
 #include "KlotoBaseGameMode.generated.h"
 
 /**
@@ -17,4 +18,11 @@ class KLOTO_API AKlotoBaseGameMode : public AGameModeBase
 
 public:
 	AKlotoBaseGameMode();
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GameSettings")
+	EKlotoGameDifficulty CurrentGameplayDifficulty;
+
+public:
+	FORCEINLINE EKlotoGameDifficulty GetCurrentGameDifficulty() const { return CurrentGameplayDifficulty; }
 };

@@ -13,6 +13,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/UI/EnemyUIComponent.h"
+#include "GameModes/KlotoBaseGameMode.h"
 #include "Widgets/KlotoWidgetBase.h"
 
 AKlotoEnemyCharacter::AKlotoEnemyCharacter()
@@ -112,13 +113,35 @@ void AKlotoEnemyCharacter::InitEnemyStartUpData()
 {
 	if (CharacterStartUpData.IsNull()) return;
 
-	UAssetManager::GetStreamableManager().RequestAsyncLoad(
-		CharacterStartUpData.ToSoftObjectPath(),
-		FStreamableDelegate::CreateLambda([this]()
+	int32 AbilityApplyLevel = 1;
+	if (AKlotoBaseGameMode* SurvivalGameMode = GetWorld()->GetAuthGameMode<AKlotoBaseGameMode>())
 	{
-		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.Get())
+		switch (SurvivalGameMode->GetCurrentGameDifficulty())
 		{
-			LoadedData->GiveToAbilitySystemComponent(KlotoAbilitySystemComponent);
+		case EKlotoGameDifficulty::Easy:
+			AbilityApplyLevel = 1;
+			break;
+		case EKlotoGameDifficulty::Normal:
+			AbilityApplyLevel = 2;
+			break;
+		case EKlotoGameDifficulty::Hard:
+			AbilityApplyLevel = 3;
+			break;
+		case EKlotoGameDifficulty::VeryHard:
+			AbilityApplyLevel = 4;
+			break;
+		default:
+			break;
 		}
-	}));
-}
+	}
+	
+		UAssetManager::GetStreamableManager().RequestAsyncLoad(
+			CharacterStartUpData.ToSoftObjectPath(),
+			FStreamableDelegate::CreateLambda([this, AbilityApplyLevel]()
+		{
+			if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.Get())
+			{
+				LoadedData->GiveToAbilitySystemComponent(KlotoAbilitySystemComponent, AbilityApplyLevel);
+			}
+		}));
+	}

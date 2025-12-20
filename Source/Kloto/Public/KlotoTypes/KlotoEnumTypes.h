@@ -35,3 +35,12 @@ enum class EKlotoCountDownActionOutput : uint8
 	Completed,
 	Canceled
 };
+
+UENUM(BlueprintType)
+enum class EKlotoGameDifficulty : uint8
+{
+	Easy,
+	Normal,
+	Hard,
+	VeryHard
+};
