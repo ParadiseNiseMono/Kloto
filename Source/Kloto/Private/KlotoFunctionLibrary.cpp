@@ -12,6 +12,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "KlotoTypes/KlotoCountDownAction.h"
 #include "KlotoGameInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "SaveGame/KlotoSaveGame.h"
 
 
 UKlotoAbilitySystemComponent* UKlotoFunctionLibrary::NativeGetKlotoAscFromActor(AActor* InActor)
@@ -230,4 +232,35 @@ void UKlotoFunctionLibrary::ToggleInputMode(const UObject* WorldContextObject, E
 		default:
 			break;
 	}
+}
+
+void UKlotoFunctionLibrary::SaveCurrentGameDifficulty(EKlotoGameDifficulty InDifficultyToSave)
+{
+	USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(UKlotoSaveGame::StaticClass());
+
+	if (UKlotoSaveGame* KlotoSaveGameObject = Cast<UKlotoSaveGame>(SaveGameObject))
+	{
+		KlotoSaveGameObject->SavedCurrentGameDifficulty = InDifficultyToSave;
+
+		bool bSuccessSaved = UGameplayStatics::SaveGameToSlot(KlotoSaveGameObject, KlotoGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
+
+		Debug::Print(bSuccessSaved ? TEXT("Successfully Saved Game") : TEXT("Failed to Save Game")) ;
+	}
+	
+}
+
+bool UKlotoFunctionLibrary::TryLoadSavedGameDifficulty(EKlotoGameDifficulty& OutSavedDifficulty)
+{
+	if (UGameplayStatics::DoesSaveGameExist(KlotoGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0))
+	{
+		USaveGame* SaveGameObject = UGameplayStatics::LoadGameFromSlot(KlotoGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
+		if (UKlotoSaveGame* KlotoSaveGameObject = Cast<UKlotoSaveGame>(SaveGameObject))
+		{
+			OutSavedDifficulty = KlotoSaveGameObject->SavedCurrentGameDifficulty;
+
+			Debug::Print(TEXT("Load Success"));
+			return true;
+		}
+	}
+	return false;
 }

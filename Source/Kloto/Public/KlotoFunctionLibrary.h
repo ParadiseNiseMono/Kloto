@@ -67,4 +67,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLibary", meta=(WorldContext = "WorldContextObject"))
 	static void ToggleInputMode(const UObject* WorldContextObject, EKlotoInputMode InInputMode);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLibary")
+	static void SaveCurrentGameDifficulty(EKlotoGameDifficulty InDifficultyToSave);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLib")
+	static bool TryLoadSavedGameDifficulty(EKlotoGameDifficulty& OutSavedDifficulty);
 };
