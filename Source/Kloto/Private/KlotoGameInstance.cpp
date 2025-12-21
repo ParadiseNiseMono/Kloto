@@ -22,7 +22,7 @@ void UKlotoGameInstance::OnPreLoadMap(const FString& MapName)
 	LoadingScreenAttributes.bAllowEngineTick = false;
 	LoadingScreenAttributes.bWaitForManualStop = false;
 	LoadingScreenAttributes.bAutoCompleteWhenLoadingCompletes = true;
-	LoadingScreenAttributes.MinimumLoadingScreenDisplayTime = 7.f;
+	LoadingScreenAttributes.MinimumLoadingScreenDisplayTime = 3.f;
 	LoadingScreenAttributes.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 
 	GetMoviePlayer()->SetupLoadingScreen(LoadingScreenAttributes);
