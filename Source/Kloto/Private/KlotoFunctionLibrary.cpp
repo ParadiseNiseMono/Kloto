@@ -243,8 +243,6 @@ void UKlotoFunctionLibrary::SaveCurrentGameDifficulty(EKlotoGameDifficulty InDif
 		KlotoSaveGameObject->SavedCurrentGameDifficulty = InDifficultyToSave;
 
 		bool bSuccessSaved = UGameplayStatics::SaveGameToSlot(KlotoSaveGameObject, KlotoGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
-
-		Debug::Print(bSuccessSaved ? TEXT("Successfully Saved Game") : TEXT("Failed to Save Game")) ;
 	}
 	
 }
@@ -258,7 +256,6 @@ bool UKlotoFunctionLibrary::TryLoadSavedGameDifficulty(EKlotoGameDifficulty& Out
 		{
 			OutSavedDifficulty = KlotoSaveGameObject->SavedCurrentGameDifficulty;
 
-			Debug::Print(TEXT("Load Success"));
 			return true;
 		}
 	}

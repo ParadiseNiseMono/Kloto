@@ -20,7 +20,8 @@ public class Kloto : ModuleRules
 			"AnimGraphRuntime",
 			"MotionWarping",
 			"Niagara",
-			"NavigationSystem"
+			"NavigationSystem",
+			"MoviePlayer"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
