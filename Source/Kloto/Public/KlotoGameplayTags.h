@@ -101,4 +101,6 @@ namespace KlotoGameplayTags
 	/*Game Data Tags*/
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_Level_SurvivalGameModMap);
 	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_Level_MainMenuMap);
+
+	KLOTO_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_SaveGame_Slot_1);
 }
