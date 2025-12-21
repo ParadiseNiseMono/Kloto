@@ -4,12 +4,25 @@
 #include "GameModes/KlotoSurvivalGameMode.h"
 
 #include "KlotoDebugHelper.h"
+#include "KlotoFunctionLibrary.h"
 #include "NavigationSystem.h"
 #include "Characters/KlotoEnemyCharacter.h"
 #include "Engine/AssetManager.h"
 #include "Engine/TargetPoint.h"
 #include "Kismet/GameplayStatics.h"
 #include "NavigationSystem.h"
+
+void AKlotoSurvivalGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	EKlotoGameDifficulty SavedGameDifficulty;
+
+	if (UKlotoFunctionLibrary::TryLoadSavedGameDifficulty(SavedGameDifficulty))
+	{
+		CurrentGameplayDifficulty = SavedGameDifficulty;
+	}
+}
 
 void AKlotoSurvivalGameMode::BeginPlay()
 {
