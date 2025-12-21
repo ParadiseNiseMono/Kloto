@@ -200,3 +200,34 @@ UKlotoGameInstance* UKlotoFunctionLibrary::GetKlotoGameInstance(const UObject* W
 	}
 	return nullptr;
 }
+
+void UKlotoFunctionLibrary::ToggleInputMode(const UObject* WorldContextObject, EKlotoInputMode InInputMode)
+{
+	APlayerController* PlayerController = nullptr;
+
+	if (GEngine)
+	{
+		if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+		{
+			PlayerController = World->GetFirstPlayerController();
+		}
+	}
+
+	if (!PlayerController) return;
+	FInputModeGameOnly InputGameOnly;
+	FInputModeUIOnly InputModeUIOnly;
+
+	switch (InInputMode)
+	{
+		case EKlotoInputMode::GameOnly:
+			PlayerController->SetInputMode(InputGameOnly);
+			PlayerController->bShowMouseCursor = false;
+			break;
+		case EKlotoInputMode::UIOnly:
+			PlayerController->SetInputMode(InputModeUIOnly);
+			PlayerController->bShowMouseCursor = true;
+			break;
+		default:
+			break;
+	}
+}

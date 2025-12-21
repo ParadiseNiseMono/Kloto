@@ -64,4 +64,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary", meta=(WorldContext = "WorldContextObject"))
 	static UKlotoGameInstance* GetKlotoGameInstance(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category = "Kloto|FunctionLibary", meta=(WorldContext = "WorldContextObject"))
+	static void ToggleInputMode(const UObject* WorldContextObject, EKlotoInputMode InInputMode);
 };

@@ -3,7 +3,7 @@
 
 #include "KlotoGameInstance.h"
 
-TSoftObjectPtr<UWorld> UKlotoGameInstance::GetGameLevelByTag(const FGameplayTag& InTag)
+TSoftObjectPtr<UWorld> UKlotoGameInstance::GetGameLevelByTag(FGameplayTag InTag) const
 {
 	for (const FKlotoGameLevelSet& GameLevelSet : GameLevelSets)
 	{

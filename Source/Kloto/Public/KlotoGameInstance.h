@@ -37,6 +37,8 @@ protected:
 	TArray<FKlotoGameLevelSet> GameLevelSets;
 
 public:
-	UFUNCTION(BlueprintCallable, meta=(GameplayTagFilter = "GameData.Level"))
-	TSoftObjectPtr<UWorld> GetGameLevelByTag(const FGameplayTag& InTag);
+	UFUNCTION(BlueprintPure, meta=(GameplayTagFilter = "GameData.Level"))
+	TSoftObjectPtr<UWorld> GetGameLevelByTag(FGameplayTag InTag) const;
+
+	
 };

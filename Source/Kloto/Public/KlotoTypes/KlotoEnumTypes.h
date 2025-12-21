@@ -44,3 +44,10 @@ enum class EKlotoGameDifficulty : uint8
 	Hard,
 	VeryHard
 };
+
+UENUM(BlueprintType)
+enum class EKlotoInputMode : uint8
+{
+	GameOnly,
+	UIOnly
+};
