@@ -11,6 +11,7 @@
 #include "Interfaces/PawnCombatInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "KlotoTypes/KlotoCountDownAction.h"
+#include "KlotoGameInstance.h"
 
 
 UKlotoAbilitySystemComponent* UKlotoFunctionLibrary::NativeGetKlotoAscFromActor(AActor* InActor)
@@ -186,4 +187,16 @@ void UKlotoFunctionLibrary::CountDown(const UObject* WorldContextObject, float T
 			FoundAction->CancelAction();
 		}
 	}
+}
+
+UKlotoGameInstance* UKlotoFunctionLibrary::GetKlotoGameInstance(const UObject* WorldContextObject)
+{
+	if (GEngine)
+	{
+		if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+		{
+			return World->GetGameInstance<UKlotoGameInstance>();
+		}
+	}
+	return nullptr;
 }

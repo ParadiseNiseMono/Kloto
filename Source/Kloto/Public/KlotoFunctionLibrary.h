@@ -7,6 +7,7 @@
 #include "KlotoTypes/KlotoEnumTypes.h"
 #include "KlotoFunctionLibrary.generated.h"
 
+class UKlotoGameInstance;
 struct FGameplayEffectSpecHandle;
 struct FScalableFloat;
 class UPawnCombatComponent;
@@ -60,4 +61,7 @@ public:
 		EKlotoCountDownActionInput CountDownActionInput,
 		UPARAM(DisplayName = "Output") EKlotoCountDownActionOutput& CountDownActionOutput,
 		FLatentActionInfo LatentInfo);
+
+	UFUNCTION(BlueprintPure, Category = "Kloto|FunctionLibary", meta=(WorldContext = "WorldContextObject"))
+	static UKlotoGameInstance* GetKlotoGameInstance(const UObject* WorldContextObject);
 };
